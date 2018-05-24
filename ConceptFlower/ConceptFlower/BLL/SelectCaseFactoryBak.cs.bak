@@ -1,0 +1,495 @@
+﻿using ConceptFlower.Models;
+using PcommCore.Screen;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+namespace ConceptFlower.BLL
+{
+    public class SelectCaseFactory
+    {
+        public static SH795AccoutModel Getcase(TransferCase cs, List<SH795AccoutModel> entityList, WhiteListcs whlist, TrusteInfoModel tsinfo, List<UserInfoSchemeInfo> schemeInfoList)
+        {
+            SH795AccoutModel model = null;
+            Regex reg1 = new Regex(@"^(\d{8})(-|\s)(\d{9})$");
+            Regex reg2 = new Regex(@"^(\d{8})(-|\s)(\d{8})$");
+            Regex reg3 = new Regex(@"^\d{9}$");
+            Regex reg4 = new Regex(@"^\d{8}$");
+            Regex reg5 = new Regex(@"^\d{17}$");
+            Regex reg6 = new Regex(@"^(\d{9})(-|\s)(\d{8})$");
+            Regex reg7 = new Regex(@"^\d{17}$");
+            bool IsContinue = false;// this tag  is whether the code execute the second select logic
+            #region first check logic
+            if (reg1.IsMatch(cs.OriSchAcctMemNo))
+            {
+                model = GetAccountByReg1(cs, entityList, whlist, reg1);
+            }
+            else if (reg2.IsMatch(cs.OriSchAcctMemNo))
+            {
+                model = GetAccountByReg2(cs, entityList, whlist, tsinfo, reg2);
+            }
+            else if (reg3.IsMatch(cs.OriSchAcctMemNo))
+            {
+                model = GetAccountByReg3(cs, entityList, whlist, tsinfo, reg3);
+            }
+            else if (reg4.IsMatch(cs.OriSchAcctMemNo))
+            {
+                model = GetAccountByReg4(cs, entityList, whlist, tsinfo, reg4);
+            }
+            else if (reg5.IsMatch(cs.OriSchAcctMemNo))
+            {
+                model = GetAccountByReg5(cs, entityList, whlist, reg5);
+            }
+            else if (reg6.IsMatch(cs.OriSchAcctMemNo))
+            {
+                model = GetAccountByReg6(cs, entityList, whlist, reg6);
+            }
+            else if (reg7.IsMatch(cs.OriSchAcctMemNo))
+            {
+                model = GetAccountByReg7(cs, entityList, whlist, tsinfo, reg7);
+            }
+            else
+            {
+                whlist.Clean_Case = "N";
+                whlist.Unclean_Reason.Append("Member Account or ERID is Error, pls input correct whitelsit \r\n");
+                if (cs.RequestFormType == "PM")
+                {
+                    whlist.ErrorCode.Append("3,5,");
+                }
+                else if (cs.RequestFormType == "PC")
+                {
+                    whlist.ErrorCode.Append("3,");
+                }
+            }
+            #endregion
+            #region the second select logic
+            if (IsContinue)
+            {
+
+            }
+            #endregion
+            return model;
+        }
+
+        private static List<UserInfoSchemeInfo> GetSchemeList(string oriSchRegNo, List<TrusteInfoModel> trusteeInfos)
+        {
+            //List<UserInfoSchemeInfo> list = new List<UserInfoSchemeInfo>();
+            //TrusteInfoModel trusteeInfo = trusteeInfos.Where(t => t.Scheme_Registration_No == oriSchRegNo).FirstOrDefault();
+            //if(trusteeInfo!=null)
+            //{
+            //    string CaseNO=
+            //}
+            return null;
+        }
+
+
+        /// <summary>
+        /// 12345678-123456789
+        /// </summary>
+        /// <param name="cs"></param>
+        /// <param name="entityList"></param>
+        /// <param name="whlist"></param>
+        /// <param name="reg"></param>
+        /// <returns></returns>
+        private static SH795AccoutModel GetAccountByReg1(TransferCase cs, List<SH795AccoutModel> entityList, WhiteListcs whlist, Regex reg,out bool IsContinue)
+        {
+            SH795AccoutModel acModel =null;
+            string SchemeID = reg.Match(cs.OriSchAcctMemNo).Groups[1].Value;
+            string MembershipNo = reg.Match(cs.OriSchAcctMemNo).Groups[3].Value;
+            if (entityList.Where(t => t.SchemeID == SchemeID).Count() <= 0 && entityList.Where(t => t.Client == MembershipNo.Substring(1)).Count() <= 0)
+            {
+                whlist.ErrorCode.Append("8,");
+            }
+            else
+            {
+                acModel = entityList.Where(t => t.SchemeID == SchemeID && t.Client == MembershipNo.Substring(1)).FirstOrDefault();
+                if(acModel!=null)
+                {
+                    acModel.MembershipNo = MembershipNo;
+                }
+                else
+                {
+                    acModel= entityList.Where(t => t.SchemeID == SchemeID).FirstOrDefault();
+                }
+                if (acModel == null)
+                {
+                    if (cs.RequestFormType == "PM")
+                    {
+                        whlist.ErrorCode.Append("3,5,");
+                    }
+                    else if (cs.RequestFormType == "PC")
+                    {
+                        whlist.ErrorCode.Append("3,");
+                    }
+                }
+                else
+                {
+                    acModel.MembershipNo = MembershipNo;
+                }
+            }
+            IsContinue = false;
+            return acModel;
+        }
+        /// <summary>
+        /// 12345678-12345678
+        /// </summary>
+        /// <param name="cs"></param>
+        /// <param name="entityList"></param>
+        /// <param name="whlist"></param>
+        /// <param name="reg"></param>
+        /// <returns></returns>
+        private static SH795AccoutModel GetAccountByReg2(TransferCase cs, List<SH795AccoutModel> entityList, WhiteListcs whlist, TrusteInfoModel tsinfo, Regex reg)
+        {
+            SH795AccoutModel acModel = null;
+            string SchemeID = reg.Match(cs.OriSchAcctMemNo).Groups[1].Value;
+            string MembershipNo = reg.Match(cs.OriSchAcctMemNo).Groups[3].Value;
+            #region Check 99 code
+            if (entityList.Where(t=>t.SchemeID==SchemeID).Count()>0&& entityList.Where(t => t.SchemeID == MembershipNo).Count() > 0)
+            {
+                whlist.Clean_Case = "N";
+                whlist.Unclean_Reason.Append("Duplicate request in the NEWD file.\r\n");
+                whlist.ErrorCode.Append("99,");
+                throw new Exception("Duplicate request in the NEWD file.");
+            }
+            if (entityList.Where(t => t.Client == SchemeID).Count() > 0 && entityList.Where(t => t.Client == SchemeID).Count() > 0)
+            {
+                whlist.Clean_Case = "N";
+                whlist.Unclean_Reason.Append("Duplicate request in the NEWD file.\r\n");
+                whlist.ErrorCode.Append("99,");
+                throw new Exception("Duplicate request in the NEWD file.");
+            }
+            #endregion
+            SH795AccoutModel model = entityList.Where(t => t.SchemeID == SchemeID && t.Client == MembershipNo).FirstOrDefault();
+            if (model != null)
+            {
+                //MembershipNo = model.Client;
+                acModel = model;
+            }
+            else
+            {
+                SchemeID = reg.Match(cs.OriSchAcctMemNo).Groups[3].Value;
+                MembershipNo = reg.Match(cs.OriSchAcctMemNo).Groups[1].Value;
+                model = entityList.Where(t => t.SchemeID == SchemeID && t.Client == MembershipNo).FirstOrDefault();
+                if (model != null)
+                {
+                    acModel = model;
+                    if (tsinfo.Scheme_name.StartsWith("HANG"))
+                    {
+                        acModel.MembershipNo = "3"+ MembershipNo;
+                    }
+                    else if (tsinfo.Scheme_name.StartsWith("HSBC"))
+                    {
+                        acModel.MembershipNo = "2" + MembershipNo;
+                    }
+                }
+                else
+                {
+                    whlist.Clean_Case = "N";
+                    whlist.Unclean_Reason.Append("pls input correct whitelsit.\r\n");
+                    if (cs.RequestFormType == "PM")
+                    {
+                        whlist.ErrorCode.Append("3,5,");
+                    }
+                    else if (cs.RequestFormType == "PC")
+                    {
+                        whlist.ErrorCode.Append("3,");
+                    }
+                }
+            }
+            return acModel;
+        }
+        /// <summary>
+        /// 123456789
+        /// </summary>
+        /// <param name="cs"></param>
+        /// <param name="entityList"></param>
+        /// <param name="whlist"></param>
+        /// <param name="reg"></param>
+        /// <returns></returns>
+        private static SH795AccoutModel GetAccountByReg3(TransferCase cs, List<SH795AccoutModel> entityList, WhiteListcs whlist, TrusteInfoModel tsinfo, Regex reg)
+        {
+            SH795AccoutModel acModel = null;
+            List<SH795AccoutModel> mylist = entityList.Where(t => t.Client == cs.OriSchAcctMemNo.Substring(1)).ToList();
+            if (mylist.Count() > 1)
+            {
+                whlist.Clean_Case = "N";
+                whlist.Unclean_Reason.Append("There are MemebershipNo with multiple data is the same");
+                whlist.ErrorCode.Append("13,");
+                throw new Exception("There are MemebershipNo with multiple data is the same");
+            }
+            else if (mylist.Count() == 1)
+            {
+                //SchemeID = mylist[0].SchemeID;
+                acModel = mylist[0];
+                if (tsinfo.Scheme_name.StartsWith("HANG"))
+                {
+                    acModel.MembershipNo = "3" + acModel.Client;
+                }
+                else if (tsinfo.Scheme_name.StartsWith("HSBC"))
+                {
+                    acModel.MembershipNo = "2" + acModel.Client;
+                }
+                //acModel.MembershipNo = cs.OriSchAcctMemNo;
+            }
+            else
+            {
+                whlist.Clean_Case = "N";
+                whlist.Unclean_Reason.Append("pls input correct whitelsit");
+                if (cs.RequestFormType == "PM")
+                {
+                    whlist.ErrorCode.Append("3,5,");
+                }
+                else if (cs.RequestFormType == "PC")
+                {
+                    whlist.ErrorCode.Append("3,");
+                }
+                //return false;
+            }
+            return acModel;
+        }
+        /// <summary>
+        /// 12345678
+        /// </summary>
+        /// <param name="cs"></param>
+        /// <param name="entityList"></param>
+        /// <param name="whlist"></param>
+        /// <param name="reg"></param>
+        /// <returns></returns>
+        private static SH795AccoutModel GetAccountByReg4(TransferCase cs, List<SH795AccoutModel> entityList, WhiteListcs whlist, TrusteInfoModel tsinfo, Regex reg)
+        {
+            SH795AccoutModel acModel = null;
+            IEnumerable<SH795AccoutModel> list1 = entityList.Where(t => t.SchemeID == cs.OriSchAcctMemNo);
+            //如果在SchemeID存在
+            if (list1.Count() > 0)
+            {
+                SH795AccoutModel model = list1.OrderByDescending(t => t.DJS).FirstOrDefault();
+                //SchemeID = model.SchemeID;
+                //MembershipNo = model.Client;
+                acModel = model;
+                if (tsinfo.Scheme_name.StartsWith("HANG"))
+                {
+                    acModel.MembershipNo = "3" + acModel.Client;
+                }
+                else if (tsinfo.Scheme_name.StartsWith("HSBC"))
+                {
+                    acModel.MembershipNo = "2" + acModel.Client;
+                }
+            }
+            else
+            {
+                IEnumerable<SH795AccoutModel> list2 = entityList.Where(t => t.Client == cs.OriSchAcctMemNo);
+                if (list2.Count() > 1)
+                {
+                    whlist.Clean_Case = "N";
+                    whlist.ErrorCode.Append("13,");
+                    whlist.Unclean_Reason.Append("There are MemebershipNo with multiple data is the same \r\n");
+                    throw new Exception("There are MemebershipNo with multiple data is the same");
+                }
+                else if (list2.Count() == 1)
+                {
+                    //SchemeID = list2.ElementAtOrDefault(0).SchemeID;
+                    //MembershipNo = list2.ElementAtOrDefault(0).Client;
+                    acModel = list2.ElementAtOrDefault(0);
+                    if (tsinfo.Scheme_name.StartsWith("HANG"))
+                    {
+                        acModel.MembershipNo = "3" + acModel.Client;
+                    }
+                    else if (tsinfo.Scheme_name.StartsWith("HSBC"))
+                    {
+                        acModel.MembershipNo = "2" + acModel.Client;
+                    }
+                }
+                else
+                {
+                    whlist.Clean_Case = "N";
+                    whlist.Unclean_Reason.Append("pls input correct whitelsit \r\n");
+                    if (cs.RequestFormType == "PM")
+                    {
+                        whlist.ErrorCode.Append("3,5,");
+                    }
+                    else if (cs.RequestFormType == "PC")
+                    {
+                        whlist.ErrorCode.Append("3,");
+                    }
+                }
+            }
+            return acModel;
+        }
+        /// <summary>
+        /// 12345678912345678
+        /// </summary>
+        /// <param name="cs"></param>
+        /// <param name="entityList"></param>
+        /// <param name="whlist"></param>
+        /// <param name="reg"></param>
+        /// <returns></returns>
+        private static SH795AccoutModel GetAccountByReg5(TransferCase cs, List<SH795AccoutModel> entityList, WhiteListcs whlist, Regex reg)
+        {
+            SH795AccoutModel acModel = null;
+            bool isSelect = true;
+            string SchemeID = cs.OriSchAcctMemNo.Substring(0,8);
+            string MembershipNo = cs.OriSchAcctMemNo.Substring(8, 9);
+            if (entityList.Where(t => t.SchemeID == SchemeID).Count() <= 0 && entityList.Where(t => t.Client == MembershipNo.Substring(1)).Count() <= 0)
+            {
+                SchemeID = cs.OriSchAcctMemNo.Substring(9, 8);
+                MembershipNo = cs.OriSchAcctMemNo.Substring(0, 9);
+                if (entityList.Where(t => t.SchemeID == SchemeID).Count() <= 0 && entityList.Where(t => t.Client == MembershipNo.Substring(1)).Count() <= 0)
+                {
+                    isSelect = false;
+                    whlist.ErrorCode.Append("8,");
+                }
+            }
+            if(isSelect)
+            {
+                acModel = entityList.Where(t => t.SchemeID == SchemeID && t.Client == MembershipNo.Substring(1)).FirstOrDefault();
+                if (acModel == null)
+                {
+                    if (cs.RequestFormType == "PM")
+                    {
+                        whlist.ErrorCode.Append("3,5,");
+                    }
+                    else if (cs.RequestFormType == "PC")
+                    {
+                        whlist.ErrorCode.Append("3,");
+                    }
+                    //SchemeID = cs.OriSchAcctMemNo.Substring(9, 8);
+                    //MembershipNo = cs.OriSchAcctMemNo.Substring(0, 9);
+                    //acModel = entityList.Where(t => t.SchemeID == SchemeID && t.Client == MembershipNo.Substring(1)).FirstOrDefault();
+                    //if (acModel == null)
+                    //{
+                       
+                    //}
+                }
+                else
+                {
+                    acModel.MembershipNo = MembershipNo;
+                }
+            }
+            return acModel;
+        }
+        /// <summary>
+        /// 123456789-12345678
+        /// </summary>
+        /// <param name="cs"></param>
+        /// <param name="entityList"></param>
+        /// <param name="whlist"></param>
+        /// <param name="reg"></param>
+        /// <returns></returns>
+        private static SH795AccoutModel GetAccountByReg6(TransferCase cs, List<SH795AccoutModel> entityList, WhiteListcs whlist, Regex reg)
+        {
+            SH795AccoutModel acModel = null;
+            string SchemeID = reg.Match(cs.OriSchAcctMemNo).Groups[3].Value;
+            string MembershipNo = reg.Match(cs.OriSchAcctMemNo).Groups[1].Value; ;
+            if (entityList.Where(t => t.SchemeID == SchemeID).Count() <= 0 && entityList.Where(t => t.Client == MembershipNo.Substring(1)).Count() <= 0)
+            {
+                whlist.ErrorCode.Append("8,");
+            }
+            else
+            {
+                acModel = entityList.Where(t => t.SchemeID == SchemeID && t.Client == MembershipNo.Substring(1)).FirstOrDefault();
+                if (acModel == null)
+                {
+                    if (cs.RequestFormType == "PM")
+                    {
+                        whlist.ErrorCode.Append("3,5,");
+                    }
+                    else if (cs.RequestFormType == "PC")
+                    {
+                        whlist.ErrorCode.Append("3,");
+                    }
+                }
+                else
+                {
+                    acModel.MembershipNo = MembershipNo;
+                }
+            }
+            return acModel;
+        }
+        /// <summary>
+        /// 1234567812345678
+        /// </summary>
+        /// <param name="cs"></param>
+        /// <param name="entityList"></param>
+        /// <param name="whlist"></param>
+        /// <param name="reg"></param>
+        /// <returns></returns>
+        private static SH795AccoutModel GetAccountByReg7(TransferCase cs, List<SH795AccoutModel> entityList, WhiteListcs whlist, TrusteInfoModel tsinfo, Regex reg)
+        {
+
+            SH795AccoutModel acModel = null;
+            string SchemeID = cs.OriSchAcctMemNo.Substring(0, 8);
+            string MembershipNo = cs.OriSchAcctMemNo.Substring(8, 8);
+            #region Check 99 code
+            if (entityList.Where(t => t.SchemeID == SchemeID).Count() > 0 && entityList.Where(t => t.SchemeID == SchemeID).Count() > 0)
+            {
+                whlist.Clean_Case = "N";
+                whlist.Unclean_Reason.Append("Duplicate request in the NEWD file.\r\n");
+                whlist.ErrorCode.Append("99,");
+                throw new Exception("Duplicate request in the NEWD file.");
+            }
+            if (entityList.Where(t => t.Client == SchemeID).Count() > 0 && entityList.Where(t => t.Client == SchemeID).Count() > 0)
+            {
+                whlist.Clean_Case = "N";
+                whlist.Unclean_Reason.Append("Duplicate request in the NEWD file.\r\n");
+                whlist.ErrorCode.Append("99,");
+                throw new Exception("Duplicate request in the NEWD file.");
+            }
+            #endregion
+            SH795AccoutModel model = entityList.Where(t => t.SchemeID == SchemeID && t.Client == MembershipNo).FirstOrDefault();
+            if (model != null)
+            {
+                //MembershipNo = model.Client;
+                acModel = model;
+                if (tsinfo.Scheme_name.StartsWith("HANG"))
+                {
+                    acModel.MembershipNo = "3" + acModel.Client;
+                }
+                else if (tsinfo.Scheme_name.StartsWith("HSBC"))
+                {
+                    acModel.MembershipNo = "2" + acModel.Client;
+                }
+            }
+            else
+            {
+                SchemeID = cs.OriSchAcctMemNo.Substring(8, 8);
+                MembershipNo = cs.OriSchAcctMemNo.Substring(0, 8);
+                model = entityList.Where(t => t.SchemeID == SchemeID && t.Client == MembershipNo).FirstOrDefault();
+                if (model != null)
+                {
+                    acModel = model;
+                    if (tsinfo.Scheme_name.StartsWith("HANG"))
+                    {
+                        acModel.MembershipNo = "3" + acModel.Client;
+                    }
+                    else if (tsinfo.Scheme_name.StartsWith("HSBC"))
+                    {
+                        acModel.MembershipNo = "2" + acModel.Client;
+                    }
+                }
+                else
+                {
+                    whlist.Clean_Case = "N";
+                    whlist.Unclean_Reason.Append("pls input correct whitelsit.\r\n");
+                    if (cs.RequestFormType == "PM")
+                    {
+                        whlist.ErrorCode.Append("3,5,");
+                    }
+                    else if (cs.RequestFormType == "PC")
+                    {
+                        whlist.ErrorCode.Append("3,");
+                    }
+                }
+            }
+            return acModel;
+        }
+    }
+    //public class UserInfoSchemeInfo
+    //{
+    //    public string SchemeID { get; set; }
+    //    public string SchemeCode { get; set; }
+    //    public string CaseNO { get; set; }
+    //}
+}

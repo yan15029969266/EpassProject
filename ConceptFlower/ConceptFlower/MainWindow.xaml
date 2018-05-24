@@ -1,0 +1,122 @@
+﻿<sfe:Window x:Class="ConceptFlower.MainWindow"
+            xmlns:sfe="clr-namespace:SFE.Theme;assembly=SFE.Theme"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ConceptFlower"
+         xmlns:VM="clr-namespace:ConceptFlower.ViewModel"
+         xmlns:view="clr-namespace:ConceptFlower.View"
+        mc:Ignorable="d"
+            Background="White"
+        Title="ConceptFlower" Height="600" Width="804">
+
+    <Window.DataContext>
+        <VM:ConceptFlowerViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <Style x:Key="MyWaterMarkStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Grid>
+                            <Border Background="White" BorderBrush="#FF7D8683" BorderThickness="1"/>
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="5,0,0,0" VerticalAlignment="Center" />
+                            <Label Margin="5,0,0,0" x:Name="WaterMarkLabel" Content="{TemplateBinding Tag}" VerticalAlignment="Center"
+                               Visibility="Collapsed" Foreground="Gray" FontFamily="Arial"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Text" Value=""/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Visibility" TargetName="WaterMarkLabel" Value="Visible"/>
+                            </MultiTrigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="DimGray"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid  >
+        <TextBox x:Name="textBox" HorizontalAlignment="Left"
+                 Height="28" 
+                 Style="{StaticResource MyWaterMarkStyle}"
+                 Margin="107,28,0,0" 
+                 Tag="xml file path"
+                 Text="{Binding XmlPath}"
+                 TextWrapping="Wrap"  
+                 VerticalAlignment="Top" 
+                 Width="585" 
+                 Background="Transparent"/>
+
+        <Button x:Name="openxml" Content="..." Command="{Binding ReadXmlCommand}"
+            HorizontalAlignment="Right"
+            Margin="0,28,19,0"
+            VerticalAlignment="Top" 
+            Width="78" 
+            Background="Transparent" Height="28" RenderTransformOrigin="0.56,0.179"/>
+
+        <Label x:Name="label" Content="XML File Path:" HorizontalAlignment="Left" Margin="10,28,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="EPASS" Content="EPASS"  IsEnabled="{Binding IsEpassEnable}" Command="{Binding EpassCaseCommand}"
+                HorizontalAlignment="Right"
+                Margin="0,112,19,0"
+                VerticalAlignment="Top" 
+                Width="75" 
+                Background="Transparent" Height="28"/>
+        <Button x:Name="CHECK1" Content="CHECK" IsEnabled="{Binding IscheckEnable}" Command="{Binding CheckCaseCommand }"
+            HorizontalAlignment="Right"
+            Margin="0,111,193,0"
+            VerticalAlignment="Top" 
+            Width="75" 
+            Background="Transparent" Height="28"/>
+        <Label x:Name="ExtentionNo" Content="Extention No" HorizontalAlignment="Left" Margin="17,112,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="Extentionno" HorizontalAlignment="Left"
+            Height="28" 
+            Style="{StaticResource MyWaterMarkStyle}"
+            Margin="107,112,0,0" 
+            Tag="Extention No"
+            Text="{Binding Extention ,Mode=TwoWay}"
+            TextWrapping="Wrap"  
+            VerticalAlignment="Top" 
+            Width="88" 
+            Background="Transparent"/>
+
+        <ListView  x:Name="lstP" ItemsSource="{Binding LogList}" view:ListScroll.IsEnabled="true" Margin="17,145,10,13">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Msg}" Foreground="{Binding Color}"></TextBlock>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button x:Name="RUN" Content="RUN" IsEnabled="{Binding IsRunEnable}" Command="{Binding RunCaseCommand}"
+            HorizontalAlignment="Right"
+            Margin="0,111,105,0"
+            VerticalAlignment="Top" 
+            Width="75" 
+            Background="Transparent" Height="28"/>
+        <TextBox x:Name="exceltextbox" HorizontalAlignment="Left"
+            Height="28" 
+            Style="{StaticResource MyWaterMarkStyle}"
+            Margin="107,70,0,0" 
+            Tag="excel file path"
+            TextWrapping="Wrap"  
+            VerticalAlignment="Top" 
+            Text="{Binding ExcelPath}"
+            Width="585" 
+            Background="Transparent"/>
+        <Button x:Name="excelbutton" Content="..." Command="{Binding ReadExcelCommand}"
+            HorizontalAlignment="Right"
+            Margin="0,70,19,0"
+            VerticalAlignment="Top" 
+            Width="78" 
+            Background="Transparent" Height="28" RenderTransformOrigin="0.56,0.179"/>
+        <Label x:Name="Excel"  Content="Excel File Path:" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top"/>
+    </Grid>
+
+</sfe:Window>

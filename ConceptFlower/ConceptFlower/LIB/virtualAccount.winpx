@@ -1,0 +1,745 @@
+<?xml version="1.0"?>
+<ArrayOfProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Project>
+    <ID>884b945f-650e-4309-b28f-b2870051209f</ID>
+    <Name>virtualAccount</Name>
+    <Description>virtualAccount</Description>
+    <Applications>
+      <Application xsi:type="WebApplication">
+        <ID>8f978693-1c7f-42dc-894d-9a9dba25057a</ID>
+        <Name>gwis</Name>
+        <Description>gwis</Description>
+        <Type>Web</Type>
+        <Screens>
+          <Screen xsi:type="WebScreen">
+            <Name>MpfTerminationPage</Name>
+            <ID>b119bcf8-f964-46fe-a2ac-276d56372061</ID>
+            <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+            <Description>MpfTermination</Description>
+            <TimeoutInSec>30</TimeoutInSec>
+            <Fields>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLSelectElementClass</ElementType>
+                <ID>53a5a7b1-f19d-4d45-a84b-329bee01c663</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>b119bcf8-f964-46fe-a2ac-276d56372061</ScreenID>
+                <Name>sltProcessType</Name>
+                <Description>typy processing</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>35ab6f33-762a-44ce-9cbb-9c0ea4b3e5ee</ID>
+                    <ElementID>sltProcessType</ElementID>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLSelectElementClass</ElementType>
+                <ID>8c302a9b-1316-4c94-be38-d1b55fba230c</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>b119bcf8-f964-46fe-a2ac-276d56372061</ScreenID>
+                <Name>sltWFCKTFCompMatch</Name>
+                <Description>2</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>5d641da2-866e-4e25-a1cc-b57daad2fb53</ID>
+                    <ElementID>sltWFCKTFCompMatch</ElementID>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLSelectElementClass</ElementType>
+                <ID>b8032d70-ec5b-4430-a041-90d3658536bd</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>b119bcf8-f964-46fe-a2ac-276d56372061</ScreenID>
+                <Name>sltWFCKTrOldTrustee</Name>
+                <Description>3</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>f6c1a6b2-2d4c-48f8-ab76-4658f9ef13bf</ID>
+                    <ElementID>sltWFCKTrOldTrustee</ElementID>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLSelectElementClass</ElementType>
+                <ID>6ff0b8ee-c7bf-492c-bc71-a6e65bc32949</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>b119bcf8-f964-46fe-a2ac-276d56372061</ScreenID>
+                <Name>sltWFCKTOCompMatch</Name>
+                <Description>4</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>64ff43dd-fd8d-4b5a-8410-66df2ee84881</ID>
+                    <ElementID>sltWFCKTOCompMatch</ElementID>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLSelectElementClass</ElementType>
+                <ID>06bbfa27-e984-4894-868a-dcc84a75e4ef</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>b119bcf8-f964-46fe-a2ac-276d56372061</ScreenID>
+                <Name>sltWFCKTrNewTrustee</Name>
+                <Description>5</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>dca5726b-1339-4c78-8c2c-7ba91f3bb499</ID>
+                    <ElementID>sltWFCKTrNewTrustee</ElementID>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLSelectElementClass</ElementType>
+                <ID>8f9bd462-b3b9-48f8-80b5-341ba957d39c</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>b119bcf8-f964-46fe-a2ac-276d56372061</ScreenID>
+                <Name>sltWFCKValidForm</Name>
+                <Description>6</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>d4ac46a1-5261-49de-8e6e-770836d1eb1a</ID>
+                    <ElementID>sltWFCKValidForm</ElementID>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLSelectElementClass</ElementType>
+                <ID>e3d79ad9-7bb1-4d50-acbd-e0a62421030e</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>b119bcf8-f964-46fe-a2ac-276d56372061</ScreenID>
+                <Name>sltWFCKSVMember</Name>
+                <Description>7</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>48aba896-f210-46b7-abcf-876d054e7e1e</ID>
+                    <ElementID>sltWFCKSVMember</ElementID>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLInputElementClass</ElementType>
+                <ID>c4c00069-af5e-459c-839b-345c966f88d0</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>b119bcf8-f964-46fe-a2ac-276d56372061</ScreenID>
+                <Name>txtMBClientNo</Name>
+                <Description>txtMBClientNo</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="TagMatchRule">
+                    <ID>136a7c49-5c8d-40ac-999a-499965774b76</ID>
+                    <TagName>INPUT</TagName>
+                  </MatchRule>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>d9e4f8bd-3eca-42cb-8593-fcbef9833c70</ID>
+                    <ElementID>txtMBClientNo</ElementID>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLInputElementClass</ElementType>
+                <ID>8ec769d9-2c97-427f-856b-f021daf2ea4e</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>b119bcf8-f964-46fe-a2ac-276d56372061</ScreenID>
+                <Name>txtERIDInfo</Name>
+                <Description>txtERIDInfo</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="TagMatchRule">
+                    <ID>cf544e7f-942f-4ba5-a97e-81747efe8d2c</ID>
+                    <TagName>INPUT</TagName>
+                  </MatchRule>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>877e75d2-33d5-48b2-b054-131b727ee4c4</ID>
+                    <ElementID>txtERIDInfo</ElementID>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLInputElementClass</ElementType>
+                <ID>ca4a73a9-b8f4-4dd8-8e03-1c1fdeba7095</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>b119bcf8-f964-46fe-a2ac-276d56372061</ScreenID>
+                <Name>txtCaseNumber</Name>
+                <Description>txtCaseNumber</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="TagMatchRule">
+                    <ID>415dc23b-c393-4bde-a409-1d715986d408</ID>
+                    <TagName>INPUT</TagName>
+                  </MatchRule>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>48ea1419-96e0-4ea8-950f-783ebbdafb90</ID>
+                    <ElementID>txtCaseNumber</ElementID>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLInputElementClass</ElementType>
+                <ID>6fa858e9-8d9d-4964-9431-331f5508b344</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>b119bcf8-f964-46fe-a2ac-276d56372061</ScreenID>
+                <Name>btnGet</Name>
+                <Description>Get</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>4d0ba38b-beca-48a5-b16e-afc3624d2c2f</ID>
+                    <ElementID>btnGetHandleBy</ElementID>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+            </Fields>
+            <MatchRules>
+              <MatchRule xsi:type="DocumentMatchRule">
+                <ID>1389a40b-4950-40a4-b7c2-d5f21810b695</ID>
+                <MatchRules>
+                  <MatchRule xsi:type="UrlMatchRule">
+                    <ID>5a056347-8816-4547-aac4-6e40242b7ee7</ID>
+                    <Comparer xsi:type="StringComparer">
+                      <ComparisonValue>http://mftapp.gwis.hk.hsbc:52300/gwis/Main.html</ComparisonValue>
+                      <Type>Equals</Type>
+                    </Comparer>
+                  </MatchRule>
+                </MatchRules>
+                <Child>
+                  <ID>dee5d079-6a7b-4e5d-9640-971d1556b8b0</ID>
+                  <MatchRules>
+                    <MatchRule xsi:type="TitleMatchRule">
+                      <ID>137d6957-bebc-42af-b9f5-cb56dda5b5f3</ID>
+                      <Comparer xsi:type="StringComparer">
+                        <ComparisonValue>GWIS for MFT</ComparisonValue>
+                        <Type>Equals</Type>
+                      </Comparer>
+                    </MatchRule>
+                    <MatchRule xsi:type="UrlMatchRule">
+                      <ID>309f5a87-efe9-4915-b28b-33ca70d0184b</ID>
+                      <Comparer xsi:type="StringComparer">
+                        <ComparisonValue>http://mftapp.gwis.hk.hsbc:52300/gwis/MFTEFormSvlt</ComparisonValue>
+                        <Type>Equals</Type>
+                      </Comparer>
+                    </MatchRule>
+                  </MatchRules>
+                </Child>
+              </MatchRule>
+            </MatchRules>
+          </Screen>
+          <Screen xsi:type="WebScreen">
+            <Name>Nodcoument</Name>
+            <ID>1ee034ee-7d38-4516-a2e4-76abdf173dfa</ID>
+            <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+            <Description>Nodcoument</Description>
+            <TimeoutInSec>30</TimeoutInSec>
+            <Fields>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLInputElementClass</ElementType>
+                <ID>5d3a9281-6142-48b8-9ed4-e5dd7480ecce</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>1ee034ee-7d38-4516-a2e4-76abdf173dfa</ScreenID>
+                <Name>btnSearch</Name>
+                <Description>search</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>84c9a2cc-6ed5-4d42-92dc-a96c2ab2d492</ID>
+                    <ElementID>Search</ElementID>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+            </Fields>
+            <MatchRules>
+              <MatchRule xsi:type="DocumentMatchRule">
+                <ID>7ac29e77-dc6c-4ffa-8563-23c946d7c675</ID>
+                <MatchRules>
+                  <MatchRule xsi:type="TitleMatchRule">
+                    <ID>77dac20d-2a07-45ac-bb5c-462f4c3503bb</ID>
+                    <Comparer xsi:type="StringComparer">
+                      <ComparisonValue>No Document</ComparisonValue>
+                      <Type>Equals</Type>
+                    </Comparer>
+                  </MatchRule>
+                  <MatchRule xsi:type="UrlMatchRule">
+                    <ID>66860542-177c-4392-9005-4d1ba57ec9df</ID>
+                    <Comparer xsi:type="StringComparer">
+                      <ComparisonValue>http://mftapp.gwis.hk.hsbc:52300/gwis/Main.html</ComparisonValue>
+                      <Type>Equals</Type>
+                    </Comparer>
+                  </MatchRule>
+                </MatchRules>
+                <Child>
+                  <ID>018a2161-bda7-4f6f-b46d-3942a9b8c46d</ID>
+                  <MatchRules>
+                    <MatchRule xsi:type="TitleMatchRule">
+                      <ID>ee2c34ca-78ed-4802-9ad6-47d46ed7c29e</ID>
+                      <Comparer xsi:type="StringComparer">
+                        <ComparisonValue>ActionBar</ComparisonValue>
+                        <Type>Equals</Type>
+                      </Comparer>
+                    </MatchRule>
+                    <MatchRule xsi:type="UrlMatchRule">
+                      <ID>dcf796a3-ec73-4014-8746-6022abf756eb</ID>
+                      <Comparer xsi:type="StringComparer">
+                        <ComparisonValue>http://mftapp.gwis.hk.hsbc:52300/gwis/ActionBarSvlt</ComparisonValue>
+                        <Type>Equals</Type>
+                      </Comparer>
+                    </MatchRule>
+                  </MatchRules>
+                </Child>
+              </MatchRule>
+            </MatchRules>
+          </Screen>
+          <Screen xsi:type="WebScreen">
+            <Name>Search</Name>
+            <ID>6ce6c557-c374-4992-b0ba-b2e5c5148d04</ID>
+            <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+            <Description>search</Description>
+            <TimeoutInSec>30</TimeoutInSec>
+            <Fields>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLInputElementClass</ElementType>
+                <ID>b4c43436-31e2-4e1c-9cfd-1d4ff1fef16b</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>6ce6c557-c374-4992-b0ba-b2e5c5148d04</ScreenID>
+                <Name>txtHKID</Name>
+                <Description>inputHKID</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="NameMatchRule">
+                    <ID>215899d6-3e83-4832-8826-ed42ea7e7ca7</ID>
+                    <ElementName>txtHKID</ElementName>
+                  </MatchRule>
+                  <MatchRule xsi:type="TagMatchRule">
+                    <ID>5aa208c2-9161-45f3-a482-2dfa1c59d641</ID>
+                    <TagName>INPUT</TagName>
+                  </MatchRule>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>0e876988-4f50-40e0-aace-fd8e7ffb9981</ID>
+                    <ElementID>txtHKID</ElementID>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLTableClass</ElementType>
+                <ID>beb17b48-5fa5-4260-937a-5018ad2af7a5</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>6ce6c557-c374-4992-b0ba-b2e5c5148d04</ScreenID>
+                <Name>tblSearchResult</Name>
+                <Description>tableresult</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>c3aea0a7-3e2f-4479-aa4c-70b405bf948b</ID>
+                    <ElementID>tblSearchResult</ElementID>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLInputElementClass</ElementType>
+                <ID>b3d7ce8a-19a7-40c5-917f-618cdb95f44b</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>6ce6c557-c374-4992-b0ba-b2e5c5148d04</ScreenID>
+                <Name>btnsearch</Name>
+                <Description>search</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>0b5bdb4c-2c9f-42dc-a68d-9d4a50aad20b</ID>
+                    <ElementID>search</ElementID>
+                  </MatchRule>
+                  <MatchRule xsi:type="NameMatchRule">
+                    <ID>7d04ec60-c2f7-460e-bcb5-7e5a5e3f3601</ID>
+                    <ElementName>search</ElementName>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+            </Fields>
+            <MatchRules>
+              <MatchRule xsi:type="DocumentMatchRule">
+                <ID>2a7c5629-1859-4d9a-b0c8-5c656b6813e1</ID>
+                <MatchRules>
+                  <MatchRule xsi:type="TitleMatchRule">
+                    <ID>43493914-b784-4dc9-b2fd-fae0ee65a5b6</ID>
+                    <Comparer xsi:type="StringComparer">
+                      <ComparisonValue>Search</ComparisonValue>
+                      <Type>Equals</Type>
+                    </Comparer>
+                  </MatchRule>
+                  <MatchRule xsi:type="UrlMatchRule">
+                    <ID>53545301-0006-4395-834d-bb93b0dc1525</ID>
+                    <Comparer xsi:type="StringComparer">
+                      <ComparisonValue>http://mftapp.gwis.hk.hsbc:52300/gwis/MFTAppSearchSvlt</ComparisonValue>
+                      <Type>Contains</Type>
+                    </Comparer>
+                  </MatchRule>
+                </MatchRules>
+              </MatchRule>
+            </MatchRules>
+          </Screen>
+          <Screen xsi:type="WebScreen">
+            <Name>RemarkWorkItem</Name>
+            <ID>ba717caf-42d2-4273-87eb-98cf801d6393</ID>
+            <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+            <Description>RemarkWorkItem</Description>
+            <TimeoutInSec>30</TimeoutInSec>
+            <Fields>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLTextAreaElementClass</ElementType>
+                <ID>d048ef03-75c3-4164-bec1-83e4ba9bed46</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>ba717caf-42d2-4273-87eb-98cf801d6393</ScreenID>
+                <Name>RemarkText</Name>
+                <Description>RemarkText</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="NameMatchRule">
+                    <ID>b4435224-fde0-435c-ac4f-ad59ea787959</ID>
+                    <ElementName>RemarkText</ElementName>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLInputElementClass</ElementType>
+                <ID>60a99e76-f360-44c1-ac10-47015095fb45</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>ba717caf-42d2-4273-87eb-98cf801d6393</ScreenID>
+                <Name>btnAdd</Name>
+                <Description>btnadd</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>02e76d8a-0186-43cc-bf9a-51abd55308c0</ID>
+                    <ElementID>Add</ElementID>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLInputElementClass</ElementType>
+                <ID>032102ca-59c9-48c6-b9b8-805b63daa26d</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>ba717caf-42d2-4273-87eb-98cf801d6393</ScreenID>
+                <Name>btnClose</Name>
+                <Description>Close window</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>92558f51-2277-4b5d-ba32-97c5254f6912</ID>
+                    <ElementID>Close</ElementID>
+                  </MatchRule>
+                  <MatchRule xsi:type="NameMatchRule">
+                    <ID>55352417-830e-4add-811b-8d2edcd36715</ID>
+                    <ElementName>btnClose</ElementName>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+            </Fields>
+            <MatchRules>
+              <MatchRule xsi:type="DocumentMatchRule">
+                <ID>343f3801-1ebf-4b14-a9e4-d2bbfa1d50b6</ID>
+                <MatchRules>
+                  <MatchRule xsi:type="TitleMatchRule">
+                    <ID>39f1ab3d-e658-42b0-90a1-990f2a1689c7</ID>
+                    <Comparer xsi:type="StringComparer">
+                      <ComparisonValue>Remark(s) For Work Item</ComparisonValue>
+                      <Type>Equals</Type>
+                    </Comparer>
+                  </MatchRule>
+                  <MatchRule xsi:type="UrlMatchRule">
+                    <ID>20bb2f66-a16c-4d41-91ef-f595f9184051</ID>
+                    <Comparer xsi:type="StringComparer">
+                      <ComparisonValue>http://mftapp.gwis.hk.hsbc:52300/gwis/ItemRemarkSvlt</ComparisonValue>
+                      <Type>Equals</Type>
+                    </Comparer>
+                  </MatchRule>
+                </MatchRules>
+              </MatchRule>
+            </MatchRules>
+          </Screen>
+          <Screen xsi:type="WebScreen">
+            <Name>SearchActionBar</Name>
+            <ID>c72d8216-2ef4-4159-91ba-1df548373830</ID>
+            <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+            <Description>SearchActionBar</Description>
+            <TimeoutInSec>30</TimeoutInSec>
+            <Fields>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLInputElementClass</ElementType>
+                <ID>49a7d510-7cd4-4261-8e8e-19db92634430</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>c72d8216-2ef4-4159-91ba-1df548373830</ScreenID>
+                <Name>btnCancel</Name>
+                <Description>btnCancel</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="TagMatchRule">
+                    <ID>bdd01a5c-7f59-46ee-8451-ef5eb3f81c5a</ID>
+                    <TagName>INPUT</TagName>
+                  </MatchRule>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>c46ae619-be0b-45cf-9a8c-c0619a2e8e0c</ID>
+                    <ElementID>Cancel</ElementID>
+                  </MatchRule>
+                  <MatchRule xsi:type="NameMatchRule">
+                    <ID>78854c66-492f-453e-96c2-c410096c7d69</ID>
+                    <ElementName>btnCancel</ElementName>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLInputElementClass</ElementType>
+                <ID>6b877c37-8620-42a6-9b10-6a81ca6bd198</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>c72d8216-2ef4-4159-91ba-1df548373830</ScreenID>
+                <Name>btnSend</Name>
+                <Description>btnSend</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="TagMatchRule">
+                    <ID>55b2fc73-d1d2-4489-bd3a-3a4cc5747949</ID>
+                    <TagName>INPUT</TagName>
+                  </MatchRule>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>8c1b3ac2-9b55-4c9b-b812-639f1fd2fbf2</ID>
+                    <ElementID>Send</ElementID>
+                  </MatchRule>
+                  <MatchRule xsi:type="NameMatchRule">
+                    <ID>bb24c317-1a81-4b9b-a337-640bc72bbb19</ID>
+                    <ElementName>btnSend</ElementName>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLSelectElementClass</ElementType>
+                <ID>c0b46f99-aca8-4489-a3b2-960852be8e4f</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>c72d8216-2ef4-4159-91ba-1df548373830</ScreenID>
+                <Name>sltNpi</Name>
+                <Description>sltNpi</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="TagMatchRule">
+                    <ID>2776b876-5c2f-49cc-a37a-754e6c99b000</ID>
+                    <TagName>SELECT</TagName>
+                  </MatchRule>
+                  <MatchRule xsi:type="NameMatchRule">
+                    <ID>7fd34442-2272-4568-93a2-2b217800d584</ID>
+                    <ElementName>sltNpi</ElementName>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLInputElementClass</ElementType>
+                <ID>f0158e1c-93a2-4c45-8666-65723b07ba8e</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>c72d8216-2ef4-4159-91ba-1df548373830</ScreenID>
+                <Name>btnRemark</Name>
+                <Description>btnRemark</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="TagMatchRule">
+                    <ID>39fd2e37-a028-4b19-867e-3ad18ecee46a</ID>
+                    <TagName>INPUT</TagName>
+                  </MatchRule>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>3e41a078-de8b-417e-94b0-a9086eebacdf</ID>
+                    <ElementID>Remark</ElementID>
+                  </MatchRule>
+                  <MatchRule xsi:type="NameMatchRule">
+                    <ID>e514f82c-b5bd-4af5-974d-9195f51cc27d</ID>
+                    <ElementName>btnRemark</ElementName>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLInputElementClass</ElementType>
+                <ID>bd14114b-8063-494f-8141-e61d02591452</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>c72d8216-2ef4-4159-91ba-1df548373830</ScreenID>
+                <Name>btnSave</Name>
+                <Description>save</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>76d5caf4-cb8c-46f6-ab39-cf9f52dda494</ID>
+                    <ElementID>Save</ElementID>
+                  </MatchRule>
+                  <MatchRule xsi:type="NameMatchRule">
+                    <ID>cadf8014-2f1f-4a1d-824e-06a52b6943b8</ID>
+                    <ElementName>btnSave</ElementName>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+            </Fields>
+            <MatchRules>
+              <MatchRule xsi:type="DocumentMatchRule">
+                <ID>1bed1e12-1d38-4578-a7a7-fd0ffb8429da</ID>
+                <MatchRules>
+                  <MatchRule xsi:type="TitleMatchRule">
+                    <ID>019f8655-1385-47e7-a53f-2cc2c55e13a1</ID>
+                    <Comparer xsi:type="StringComparer">
+                      <ComparisonValue>GWISMFT</ComparisonValue>
+                      <Type>Contains</Type>
+                    </Comparer>
+                  </MatchRule>
+                  <MatchRule xsi:type="UrlMatchRule">
+                    <ID>9a1595a7-6247-4f1d-bcfa-62feb0206893</ID>
+                    <Comparer xsi:type="StringComparer">
+                      <ComparisonValue>http://mftapp.gwis.hk.hsbc:52300/gwis/Main.html</ComparisonValue>
+                      <Type>Equals</Type>
+                    </Comparer>
+                  </MatchRule>
+                </MatchRules>
+                <Child>
+                  <ID>29f028af-4b50-4f2f-af69-358629c0abdf</ID>
+                  <MatchRules>
+                    <MatchRule xsi:type="TitleMatchRule">
+                      <ID>c81d6226-7797-4321-b15c-5574f402fb5d</ID>
+                      <Comparer xsi:type="StringComparer">
+                        <ComparisonValue>ActionBar</ComparisonValue>
+                        <Type>Equals</Type>
+                      </Comparer>
+                    </MatchRule>
+                    <MatchRule xsi:type="UrlMatchRule">
+                      <ID>855f04df-020e-4fc4-afa0-f9a7d8f739da</ID>
+                      <Comparer xsi:type="StringComparer">
+                        <ComparisonValue>http://mftapp.gwis.hk.hsbc:52300/gwis/ActionBarSvlt</ComparisonValue>
+                        <Type>Equals</Type>
+                      </Comparer>
+                    </MatchRule>
+                  </MatchRules>
+                </Child>
+              </MatchRule>
+            </MatchRules>
+          </Screen>
+          <Screen xsi:type="WebScreen">
+            <Name>testWeb</Name>
+            <ID>12f36eea-bb70-4a77-899f-7ac48435fdb1</ID>
+            <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+            <Description>1</Description>
+            <TimeoutInSec>30</TimeoutInSec>
+            <Fields>
+              <Field xsi:type="WebElement">
+                <ElementType>mshtml.HTMLInputElementClass</ElementType>
+                <ID>4c2e5907-f495-404b-ad8c-73483ccaa5a1</ID>
+                <ApplicationID>8f978693-1c7f-42dc-894d-9a9dba25057a</ApplicationID>
+                <ScreenID>12f36eea-bb70-4a77-899f-7ac48435fdb1</ScreenID>
+                <Name>btnSearch</Name>
+                <Description>Search</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="IDMatchRule">
+                    <ID>ea164f1f-3368-4596-b138-166dce2e583f</ID>
+                    <ElementID>Search</ElementID>
+                  </MatchRule>
+                  <MatchRule xsi:type="NameMatchRule">
+                    <ID>57e61bcc-87af-490e-8324-82ba3206de23</ID>
+                    <ElementName>btnSearch</ElementName>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+            </Fields>
+            <MatchRules>
+              <MatchRule xsi:type="DocumentMatchRule">
+                <ID>bc8da2b4-c7cc-4fb5-ae4f-2908d4f42492</ID>
+                <MatchRules>
+                  <MatchRule xsi:type="TitleMatchRule">
+                    <ID>ef0ac2bd-ab4c-4c5c-a107-b6a9b9e9eb19</ID>
+                    <Comparer xsi:type="StringComparer">
+                      <ComparisonValue>No Document</ComparisonValue>
+                      <Type>Equals</Type>
+                    </Comparer>
+                  </MatchRule>
+                  <MatchRule xsi:type="UrlMatchRule">
+                    <ID>4e33df90-2710-4fec-8a74-3eaa415388bc</ID>
+                    <Comparer xsi:type="StringComparer">
+                      <ComparisonValue>http://mftapp.gwis.hk.hsbc:52300/gwis/Main.html</ComparisonValue>
+                      <Type>Equals</Type>
+                    </Comparer>
+                  </MatchRule>
+                </MatchRules>
+                <Child>
+                  <ID>86488cc2-7fff-41f1-9f58-a901c2f213c7</ID>
+                  <MatchRules>
+                    <MatchRule xsi:type="TitleMatchRule">
+                      <ID>aa708da6-074f-4346-aa61-be60138b779b</ID>
+                      <Comparer xsi:type="StringComparer">
+                        <ComparisonValue>ActionBar</ComparisonValue>
+                        <Type>Equals</Type>
+                      </Comparer>
+                    </MatchRule>
+                    <MatchRule xsi:type="UrlMatchRule">
+                      <ID>888b8f38-a2dc-493b-a894-9000eae5569f</ID>
+                      <Comparer xsi:type="StringComparer">
+                        <ComparisonValue>http://mftapp.gwis.hk.hsbc:52300/gwis/ActionBarSvlt</ComparisonValue>
+                        <Type>Equals</Type>
+                      </Comparer>
+                    </MatchRule>
+                  </MatchRules>
+                </Child>
+              </MatchRule>
+            </MatchRules>
+          </Screen>
+        </Screens>
+      </Application>
+      <Application xsi:type="GenericApplication">
+        <ID>7d13a519-5347-4ec8-ac93-ca930a98ad92</ID>
+        <Name>gwisTips</Name>
+        <Description />
+        <Type>Generic</Type>
+        <Screens>
+          <Screen xsi:type="GenericWindow">
+            <Name>PASendTips</Name>
+            <ID>f42348ed-cc7a-44d9-a75a-826a4c7f3e36</ID>
+            <ApplicationID>7d13a519-5347-4ec8-ac93-ca930a98ad92</ApplicationID>
+            <Description>PA</Description>
+            <TimeoutInSec>30</TimeoutInSec>
+            <Fields>
+              <Field xsi:type="GenericElement">
+                <ElementType>WinX.Windows.Controls.Button</ElementType>
+                <ID>9ba354d1-b141-4151-83bb-83ee411772f0</ID>
+                <ApplicationID>7d13a519-5347-4ec8-ac93-ca930a98ad92</ApplicationID>
+                <ScreenID>f42348ed-cc7a-44d9-a75a-826a4c7f3e36</ScreenID>
+                <Name>btnOK</Name>
+                <Description>OK</Description>
+                <TimeoutInSec>30</TimeoutInSec>
+                <MatchRules>
+                  <MatchRule xsi:type="ControlNameMatchRule">
+                    <ID>b7b29fe2-7ffe-4040-92a0-a4a9c477bb7d</ID>
+                    <ElementName>OK</ElementName>
+                  </MatchRule>
+                  <MatchRule xsi:type="ControlIdMatchRule">
+                    <ID>f881e167-513d-450e-aff1-f3376618168c</ID>
+                    <AutomationId>1</AutomationId>
+                  </MatchRule>
+                </MatchRules>
+              </Field>
+            </Fields>
+            <MatchRules>
+              <MatchRule xsi:type="WindowClassMatchRule">
+                <ID>730c1179-c6ca-47c8-910e-81f50518b99e</ID>
+                <ClassName>#32770</ClassName>
+              </MatchRule>
+              <MatchRule xsi:type="WindowTitleMatchRule">
+                <ID>07d2b8cf-afd4-4ced-bcfb-6b030dee5940</ID>
+                <Comparer xsi:type="StringComparer">
+                  <ComparisonValue>Message from webpage</ComparisonValue>
+                  <Type>Equals</Type>
+                </Comparer>
+              </MatchRule>
+            </MatchRules>
+          </Screen>
+        </Screens>
+      </Application>
+    </Applications>
+    <Company>HSBC Software Development India Pvt.Ltd</Company>
+    <Copyright>WinX, (c) All rights reserved.</Copyright>
+    <Trademark>WinX</Trademark>
+    <BuildVersion>1.8000000000000007</BuildVersion>
+    <DotNetRuntimeVersion>v3.5</DotNetRuntimeVersion>
+  </Project>
+</ArrayOfProject>
