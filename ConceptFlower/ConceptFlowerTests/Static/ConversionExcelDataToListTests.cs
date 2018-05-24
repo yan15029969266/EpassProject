@@ -122,7 +122,7 @@ namespace ConceptFlower.Static.Tests
             ew.Case_Number = "5454579859";
             ew.Clean_Case = "Y";
             ew.ERID = "21456789";
-            ew.ExtentionNo = "81634";
+            //ew.ExtentionNo = "81634";
             ew.Name_Pass = "matched";
             ew.Membership_No = "12345678-123456789";
             ew.PM_AC = "PC";
@@ -132,7 +132,7 @@ namespace ConceptFlower.Static.Tests
             ew.Name_in_XML = "test";
             ew.RowIndex = "2";
             ew.Process_result = "Processed";
-            ew.Message_Mark = "Y";
+            //ew.Message_Mark = "Y";
             ewlist.Add(ew);
 
             if (ewlist.Count > 0)
@@ -174,7 +174,7 @@ namespace ConceptFlower.Static.Tests
             List<WhiteListcs> wlist = new List<WhiteListcs>();
             WhiteListcs model = new WhiteListcs { PM_AC = "PC", Membership_No = "12345678-123456789", ERID= "21456789" ,Case_Number= "5454579859"
             ,Name_in_AS400="test",Name_in_XML="test",Name_Pass="matched",Clean_Case="Y",Unclean_Reason=new StringBuilder("sdfasdfsfds"),Signature_Pass="Pass"
-            ,Withdraw_NT_PM="NT",ExtentionNo="81634",Process_result="Process"};
+            ,Withdraw_NT_PM="NT",Process_result="Process"};
             wlist.Add(model);
             var excel = excelHandel.Open(ExcelPath);
             DataTable dt = ListToDatatableHelper.ToDataTable<WhiteListcs>(wlist);

@@ -719,6 +719,20 @@ namespace ConceptFlower.ViewModel
 
         private void CheckCaseDetail(Dictionary<string, string> dic, TransferCase cs, WhiteListcs whlist, SM799 sm799)
         {
+            #region MyRegion
+            //string SM799Tips = sm799.GetText(0, 0, 1);
+            //if(SM799Tips.Contains("MPFA"))
+            //{
+            //    whlist.Clean_Case = "N";
+            //    whlist.Unclean_Reason.Append(SM799Tips + "/r/n");
+            //}
+            //string sensitiveFlag= sm799.GetText(0, 0, 1);
+            //if(!string.IsNullOrEmpty(sensitiveFlag))
+            //{
+            //    whlist.Clean_Case = "N";
+            //}
+            #endregion
+
             var id = cs.MemHKIDNo + "(" + cs.MemHKIDCheckDigit + ")";
             //whlist.HKID = id;
 
@@ -873,6 +887,15 @@ namespace ConceptFlower.ViewModel
                             sn008.setID(wl.HKID);
                             sn008.setOption();
                             sn008.setEnter();
+
+                            Thread.Sleep(1000);
+                            string WarningInSN008 = sn008.GetMessage();
+                            if (WarningInSN008.ToUpper().Contains("Discrepency Update Lock".ToUpper()))
+                            {
+                                pcommCore.SkipToHomeScreen<S0017>();
+                                wl.Process_result = ProcessResult.Result3;
+                                continue;
+                            }
                             ProcessLogProxy.Debug("SM794 screeen Set option D", "Green", 1);
                             SN010 sn010 = pcommCore.GetScreen<SN010>();
                             if(sn010.GetErrorCode().Contains("Invalid member status"))
@@ -1049,6 +1072,7 @@ namespace ConceptFlower.ViewModel
                                 continue;
                             }
                             ProcessLogProxy.Debug(wl.Case_Number + " has completed Satge 1&2 ", "Green", 1);
+                            wl.Process_result = ProcessResult.Result1;
                         }
                         else
                         {
@@ -1108,13 +1132,10 @@ namespace ConceptFlower.ViewModel
             List<RejectionCode> ACrejectonList = clit.GetExcelDataBySheetName<RejectionCode>(objExcelCon, "AC rejection code");
             try
             {
-
-
                 //需要修改
                 await STATask.Run(() =>
                  {
                      var epassList = ewhlistdic["White List"].ToList().Where(x => x.Clean_Case == "N").ToList();
-
                      var Remark = string.Empty;
                      pcommCore.SkipToHomeScreen<S0017>();
                      foreach (var wl in epassList)
@@ -1268,12 +1289,15 @@ namespace ConceptFlower.ViewModel
                                  sj761.SetPrintALL();
                                  sj761.SendKey(KeyBoard.Enter);
                                  SJ672 sj672 = pcommCore.GetScreen<SJ672>();
+                                 Thread.Sleep(500);
                                  sj672.SetRemark(Remark);
+                                 Thread.Sleep(500);
                                  sj672.SetEnter();
                                  pcommCore.SkipToHomeScreen<S0017>();
                                  // update gwis
                                  //gwisOperation.EpassUpdateGwis(sl);
                                  gwisOperation.EpassUpadateGwis(wl,Remark);
+                                 wl.Letter_date = DateTime.Now.ToString("yyyy/MM/dd");
                              }
                              else
                              {

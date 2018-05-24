@@ -89,6 +89,7 @@
     <Compile Include="Command\RelayCommand.cs" />
     <Compile Include="Extention\AccountException.cs" />
     <Compile Include="Extention\IgnoreCaseException.cs" />
+    <Compile Include="Extention\ProcessResult.cs" />
     <Compile Include="Extention\Util.cs" />
     <Compile Include="Log\LogHelper.cs" />
     <Compile Include="Log\ProcessLogProxy.cs" />
