@@ -26,6 +26,7 @@ using System.Xml;
 using ConceptFlower.BLL;
 using System.Text.RegularExpressions;
 using ConceptFlower.Extention;
+using System.Collections;
 
 namespace ConceptFlower.ViewModel
 {
@@ -157,8 +158,32 @@ namespace ConceptFlower.ViewModel
         public static ManualResetEvent mre = null;
 
 
+        private List<TransferCase> TestList(List<TransferCase> list)
+        {
+            ArrayList arrayList = new ArrayList();//声明一个集合对象
+
+            Random r = new Random();//声明一个随机对象
+            for (int i = 0; i < 20; i++)
+            {
+                int number = r.Next(0, list.Count() - 1);//生成一个随机数，0-9
+                while (arrayList.Contains(number))//判断集合中有没有生成的随机数，如果有，则重新生成一个随机数，直到生成的随机数list集合中没有才退出循环
+                {
+                    number = r.Next(0, list.Count() - 1);
+                }
+                arrayList.Add(number);//将生成的随机数添加到集合对象中
+            }
+            List<TransferCase> resultList = new List<TransferCase>();
+            arrayList.Sort();
+            foreach (int index in arrayList)
+            {
+                resultList.Add(list[index]);
+            }
+            return resultList;
+        }
+
         private async void CheckCase()
         {
+            ProcessLogProxy.Debug("Start Checking Xml Data", "Green", 1);
             wlist = new List<WhiteListcs>();
             if (slidt.Header == null && slidt.TransferCase == null)
             {
@@ -185,7 +210,13 @@ namespace ConceptFlower.ViewModel
                 try
                 {
                     int index = 1;
-                    foreach (var cs in slidt.TransferCase)
+                    List<TransferCase> runList = slidt.TransferCase.Where(t => t.RequestFormType == "PC" && t.RequestFormType == "PM").ToList();
+                    if (slidt.TransferCase.Count() > 20)
+                    {
+                        runList = TestList(slidt.TransferCase);
+                    }
+                    //foreach (var cs in slidt.TransferCase)
+                    foreach (var cs in runList)
                     {
                         ProcessLogProxy.Debug(cs.TransferCaseNo + " is checking", "Green", 1);
                         WhiteListcs whlist = new WhiteListcs();
@@ -196,19 +227,18 @@ namespace ConceptFlower.ViewModel
                         whlist.Name_in_XML = cs.MemEngName;
                         whlist.HKID = cs.MemHKIDNo + "(" + cs.MemHKIDCheckDigit + ")";
                         #region 下载图片到excel
-                        string filePath = Path.GetDirectoryName(ExcelPath)+@"\Image\"+cs.TransferCaseNo+".jpg";
+                        string filePath = Path.GetDirectoryName(ExcelPath) + @"\Image\" + cs.TransferCaseNo + ".jpg";
                         Util.Base64SaveFlie(cs.FormImageCode, filePath);
                         whlist.Addr_In_Form = filePath;
                         #endregion
-
-                        //whlist.Company=
                         try
                         {
                             if (!gwisOperation.SearchCase(cs, trusteInfodDic))
                             {
-                                //whlist.Name_Pass = gwisOperation.Member;
+                                whlist.Signature_Pass = gwisOperation.Member;
                                 if (gwisOperation.Member != null && gwisOperation.Member.Trim() == "Unmatched")
                                 {
+                                    
                                     whlist.ErrorCode.Append("6,");
                                 }
                                 else if (gwisOperation.Member != null && gwisOperation.Member.Trim() == "No MIP")
@@ -223,7 +253,7 @@ namespace ConceptFlower.ViewModel
                             {
                                 bool isSelectCase = false;
                                 //whlist.Name_Pass = gwisOperation.Member;
-                                
+
                                 var tsinfo = trusteInfodDic["Trustee info"].Where(x => x.Scheme_Registration_No == cs.OriSchRegNo).FirstOrDefault();
                                 pcommCore.SkipToHomeScreen<S0017>();
                                 pcommCore.LinkToScreen<S0017>((S0017) =>
@@ -347,8 +377,6 @@ namespace ConceptFlower.ViewModel
                                 }
                                 // go to SM799
                                 SM799 sm799 = pcommCore.GetScreen<SM799>();
-
-                                //var id = cs.MemHKIDNo + "(" + cs.MemHKIDCheckDigit + ")";
                                 var dic = sm799.GetMemberInformation();
                                 try
                                 {
@@ -360,19 +388,14 @@ namespace ConceptFlower.ViewModel
                                 }
                                 // return SM799 Screen
                                 SM799 s_sm7799 = pcommCore.GetScreen<SM799>();
-                                //s_sm7799.Set_F2();
                                 s_sm7799.Set_ShiftF8();
-                                //
                                 try
                                 {
                                     SJ671 sj671 = pcommCore.GetScreen<SJ671>();
                                     sj671.SetStoAll();
                                     sj671.ClearSchemeID();
-                                    //sj671.SetPrintALL();
-                                    //sj671.Enter(21, 69);
                                     sj671.SendKey(KeyBoard.Enter);
-                                    //if (sj671.SelectSchemeID(keywords, 10, pcommCore))
-                                    if(sj671.NotePadPass(keywords, pcommCore))
+                                    if (sj671.NotePadPass(keywords, pcommCore))
                                     {
                                         whlist.Notepad_Pass = "Y";
                                         pcommCore.SkipToHomeScreen<S0017>();
@@ -413,7 +436,7 @@ namespace ConceptFlower.ViewModel
                             #endregion
                             wlist.Add(whlist);
                         }
-                        catch(IgnoreCaseException ex)
+                        catch (IgnoreCaseException ex)
                         {
                             whlist.Clean_Case = "N/A";
                             whlist.Unclean_Reason.Append(ex.Message + "\r\n");
@@ -495,17 +518,17 @@ namespace ConceptFlower.ViewModel
             List<TrusteInfoModel> trusteeInfos = clit.GetExcelDataBySheetName<TrusteInfoModel>(objExcelCon, "Trustee info");
             List<UserInfoSchemeInfo> list = new List<UserInfoSchemeInfo>();
             object[,] datas = clit.GetExcelDataByRange("Useful info", "A2", "C5");
-            for(int i=1;i<=datas.GetLength(0);i++)
+            for (int i = 1; i <= datas.GetLength(0); i++)
             {
-                string schemeCode = datas[i,1].ToString();
+                string schemeCode = datas[i, 1].ToString();
                 TrusteInfoModel trusteeInfo = trusteeInfos.Where(t => t.Scheme_code == schemeCode).FirstOrDefault();
                 string CaseNO = string.Empty;
-                if (trusteeInfo!=null)
+                if (trusteeInfo != null)
                 {
                     CaseNO = trusteeInfo.Scheme_Registration_No;
                 }
-                UserInfoSchemeInfo model1 = new UserInfoSchemeInfo { SchemeCode= datas[i,1].ToString(),SchemeID= datas[i,2].ToString(),CaseNO= CaseNO };
-                UserInfoSchemeInfo model2 = new UserInfoSchemeInfo { SchemeCode = datas[i,1].ToString(), SchemeID = datas[i,3].ToString(), CaseNO = CaseNO };
+                UserInfoSchemeInfo model1 = new UserInfoSchemeInfo { SchemeCode = datas[i, 1].ToString(), SchemeID = datas[i, 2].ToString(), CaseNO = CaseNO, IsFirst = false };
+                UserInfoSchemeInfo model2 = new UserInfoSchemeInfo { SchemeCode = datas[i, 1].ToString(), SchemeID = datas[i, 3].ToString(), CaseNO = CaseNO, IsFirst = true };
                 list.Add(model1);
                 list.Add(model2);
             }
@@ -537,22 +560,22 @@ namespace ConceptFlower.ViewModel
                         SelectCaseBySingleAC(cs, whlist, acModel, tsinfo, entityList, sh795);
                     }
                 }
-                catch(AccountException ex)
+                catch (AccountException ex)
                 {
                     if (ex.Message == "Please Check Value Choice")
                     {
-                        bool isSelected=SelectCaseByACList(cs, whlist, tsinfo, entityListOther, sh795);
+                        bool isSelected = SelectCaseByACList(cs, whlist, tsinfo, entityListOther, sh795);
                         if (!isSelected)
                         {
-                            if(tsinfo.Scheme_name.StartsWith("HANG"))
+                            if (tsinfo.Scheme_name.StartsWith("HANG"))
                             {
                                 acModel = entityList.Where(t => t.PayCID == "PR01" && t.SchemeID.StartsWith("3")).FirstOrDefault();
                             }
-                            else if(tsinfo.Scheme_name.StartsWith("HSBC"))
+                            else if (tsinfo.Scheme_name.StartsWith("HSBC"))
                             {
                                 acModel = entityList.Where(t => t.PayCID == "PR01" && t.SchemeID.StartsWith("2")).FirstOrDefault();
                             }
-                            if(acModel!=null)
+                            if (acModel != null)
                             {
                                 whlist.Clean_Case = "N";
                                 whlist.Unclean_Reason.Append("Missing/Incorrect Orig Scheme Reg No (Scheme name) \r\n");
@@ -608,7 +631,7 @@ namespace ConceptFlower.ViewModel
             {
                 throw new Exception(ex.Message + " in SH795");
             }
-           
+
             return true;
         }
 
@@ -627,16 +650,16 @@ namespace ConceptFlower.ViewModel
 
             }).LinkToScreen<SH795>((SH795Screen) =>
             {
-                
+
                 foreach (SH795AccoutModel acModel in entityList)
                 {
-                    if(SH795Screen.SelectCase(acModel, tsinfo.Scheme_name))
+                    if (SH795Screen.SelectCase(acModel, tsinfo.Scheme_name))
                     {
                         SM799 sm799 = pcommCore.GetScreen<SM799>();
                         string title = sm799.GetText(3, 58, 20).Trim();
-                        if(title.ToLower() == "value choice")
+                        if (title.ToLower() == "value choice")
                         {
-                            isFindCase=true;
+                            isFindCase = true;
                             if (acModel.Sts == "TE")
                             {
                                 whlist.ErrorCode.Append("9,");
@@ -673,7 +696,7 @@ namespace ConceptFlower.ViewModel
             return isFindCase;
         }
 
-        private void SelectCaseBySingleAC(TransferCase cs,WhiteListcs whlist, SH795AccoutModel acModel, TrusteInfoModel tsinfo, List<SH795AccoutModel> entityList, SH795 sh795)
+        private void SelectCaseBySingleAC(TransferCase cs, WhiteListcs whlist, SH795AccoutModel acModel, TrusteInfoModel tsinfo, List<SH795AccoutModel> entityList, SH795 sh795)
         {
             if ((acModel.Client.StartsWith("2") && tsinfo.Scheme_name.StartsWith("HANG")) || (acModel.Client.StartsWith("3") && tsinfo.Scheme_name.StartsWith("HSBC")))
             {
@@ -786,7 +809,9 @@ namespace ConceptFlower.ViewModel
 
             ProcessLogProxy.Debug("SM800  get Chinese Name  ", "Green", 1);
 
-            if (sm800.GetMemberChineseInformation()["CHINESENAME"].ToString() == cs.MemChiName || string.IsNullOrEmpty(cs.MemChiName))
+            if (sm800.GetMemberChineseInformation()["CHINESENAME"].ToString().Trim() == cs.MemChiName.Trim() 
+                || string.IsNullOrEmpty(cs.MemChiName.Trim())
+                || string.IsNullOrEmpty(cs.MemChiName.Trim()))
             {
                 sm800.SendKey(KeyBoard.Enter);
             }
@@ -843,7 +868,7 @@ namespace ConceptFlower.ViewModel
 
         private async void RunCase()
         {
-
+            ProcessLogProxy.Debug("Start Stage 1&2", "Green", 1);
             OleDbConnection objExcelCon = clit.openExcel();
             ewhlistdic = clit.ExtractEmployeeExcel<ExcelWhlist>(objExcelCon, "White List");
             List<TrusteInfoModel> trusteeInfos = clit.GetExcelDataBySheetName<TrusteInfoModel>(objExcelCon, "Trustee info");
@@ -852,7 +877,7 @@ namespace ConceptFlower.ViewModel
             {
                 await STATask.Run(() =>
                 {
-                    
+
                     var passList = ewhlistdic["White List"].ToList().Where(x => x.Clean_Case == "Y").ToList();
                     pcommCore.SkipToHomeScreen<S0017>();
                     foreach (var wl in passList)
@@ -898,7 +923,7 @@ namespace ConceptFlower.ViewModel
                             }
                             ProcessLogProxy.Debug("SM794 screeen Set option D", "Green", 1);
                             SN010 sn010 = pcommCore.GetScreen<SN010>();
-                            if(sn010.GetErrorCode().Contains("Invalid member status"))
+                            if (sn010.GetErrorCode().Contains("Invalid member status"))
                             {
                                 ProcessLogProxy.Debug("SN010 Screen Invalid member status", "Red", 3);
                                 continue;
@@ -972,7 +997,7 @@ namespace ConceptFlower.ViewModel
                             sn0101.SendKey(KeyBoard.Enter);
                             Thread.Sleep(5000);
                             bool isSkiped = false;
-                            while(!isSkiped)
+                            while (!isSkiped)
                             {
                                 isSkiped = Stage2Skiped();
                             }
@@ -1003,13 +1028,13 @@ namespace ConceptFlower.ViewModel
                                     sn014.SetEnter();
                                     SN018 sn018 = pcommCore.GetScreen<SN018>();
                                     TrusteInfoModel trusteeInfo = trusteeInfos.Where(t => t.Trustee_Approval_No == sl.NewTRAprvlNo).FirstOrDefault();
-                                    if(trusteeInfo!=null&&!string.IsNullOrEmpty(trusteeInfo.Trustee_client_no))
+                                    if (trusteeInfo != null && !string.IsNullOrEmpty(trusteeInfo.Trustee_client_no))
                                     {
                                         if (sn018.SelectClientNO(trusteeInfo.Trustee_client_no))
                                         {
                                             SJ353 sj353 = pcommCore.GetScreen<SJ353>();
                                             // exce 
-                                            TrusteInfoModel data = trusteeInfos.Where(t => t.Scheme_Registration_No == sl.NewSchRegNo&& t.Trustee_Approval_No == sl.NewTRAprvlNo).FirstOrDefault();
+                                            TrusteInfoModel data = trusteeInfos.Where(t => t.Scheme_Registration_No == sl.NewSchRegNo && t.Trustee_Approval_No == sl.NewTRAprvlNo).FirstOrDefault();
                                             //var data = trusteInfodDic["Trusteeinfo"].Where(x => x.Scheme_Registration_No == sl.NewSchRegNo).FirstOrDefault();
                                             if (data != null)
                                             {
@@ -1032,11 +1057,11 @@ namespace ConceptFlower.ViewModel
                                                 wl.Process_result = sn0083.GetMessage();
 
 
-                                                if (sn0083.GetMessage().Contains("Last transaction processed")||
+                                                if (sn0083.GetMessage().Contains("Last transaction processed") ||
                                                 sn0083.GetMessage().Contains("Record already exists"))
                                                 {
                                                     // update gwis
-                                                    gwisOperation.SetOption(wl,data.In_Short);
+                                                    gwisOperation.SetOption(wl, data.In_Short);
                                                 }
                                                 else
                                                 {
@@ -1126,6 +1151,7 @@ namespace ConceptFlower.ViewModel
 
         private async void EpassCase()
         {
+            ProcessLogProxy.Debug("Start Epass", "Green", 1);
             OleDbConnection objExcelCon = clit.openExcel();
             ewhlistdic = clit.ExtractEmployeeExcel<ExcelWhlist>(objExcelCon, "White List");
             List<RejectionCode> PMrejectonList = clit.GetExcelDataBySheetName<RejectionCode>(objExcelCon, "PM rejection code");
@@ -1187,7 +1213,7 @@ namespace ConceptFlower.ViewModel
                                  sg756.Set_option();
                                  sg756.SendKey(KeyBoard.Enter);
                                  bool isCrossCompany = false;
-                                 if(sg756.GetWarningMessage().Contains("Scheme not verified"))
+                                 if (sg756.GetWarningMessage().Contains("Scheme not verified"))
                                  {
                                      isCrossCompany = true;
                                      sg756.Set_SchemeId("        ");
@@ -1197,7 +1223,7 @@ namespace ConceptFlower.ViewModel
                                  }
                                  CommonScreen commnoScreen = pcommCore.GetScreen<CommonScreen>();
                                  int enterNum = 0;
-                                 while(enterNum<6)
+                                 while (enterNum < 6)
                                  {
                                      string screenCode = commnoScreen.GetText(1, 70, 10).Trim().ToUpper();
                                      if (screenCode.Contains("SG761"))
@@ -1210,7 +1236,7 @@ namespace ConceptFlower.ViewModel
                                          enterNum++;
                                      }
                                  }
-                                 if(enterNum>=6)
+                                 if (enterNum >= 6)
                                  {
                                      pcommCore.SkipToHomeScreen<S0017>();
                                      continue;
@@ -1230,7 +1256,7 @@ namespace ConceptFlower.ViewModel
                                  string[] codes = wl.ErrorCode.Split(',');
                                  sg761.SetCodeInSG761(codes, pcommCore);
                                  string codeMessage = GetCodeRejection(wl.PM_AC, codes, PMrejectonList, ACrejectonList);
-                                 Remark = string.Format("{0} {1} received, but {2}, L/O 2016/6/16 to trustee", "Ext."+ Extention, wl.PM_AC, codeMessage, DateTime.Now.ToString("yyyy/mm/dd"));
+                                 Remark = string.Format("{0} {1} received, but {2}, L/O 2016/6/16 to trustee", "Ext." + Extention, wl.PM_AC, codeMessage, DateTime.Now.ToString("yyyy/mm/dd"));
 
                                  SG756 sg7561 = pcommCore.GetScreen<SG756>();
                                  if (sg7561.GetWarningMessage() == "Last transaction processed")
@@ -1296,7 +1322,7 @@ namespace ConceptFlower.ViewModel
                                  pcommCore.SkipToHomeScreen<S0017>();
                                  // update gwis
                                  //gwisOperation.EpassUpdateGwis(sl);
-                                 gwisOperation.EpassUpadateGwis(wl,Remark);
+                                 gwisOperation.EpassUpadateGwis(wl, Remark);
                                  wl.Letter_date = DateTime.Now.ToString("yyyy/MM/dd");
                              }
                              else
@@ -1342,7 +1368,7 @@ namespace ConceptFlower.ViewModel
             {
                 if (codes[i].StartsWith("0"))
                 {
-                    codes[i] =codes[i].Substring(1);
+                    codes[i] = codes[i].Substring(1);
                 }
             }
             string rejectionReason = string.Empty;
@@ -1357,7 +1383,7 @@ namespace ConceptFlower.ViewModel
             }
             foreach (RejectionCode code in selectedCodes)
             {
-                rejectionReason = string.IsNullOrEmpty(rejectionReason) ? code.Description : rejectionReason +", "+ code.Description;
+                rejectionReason = string.IsNullOrEmpty(rejectionReason) ? code.Description : rejectionReason + ", " + code.Description;
             }
             return rejectionReason;
         }
@@ -1447,11 +1473,11 @@ namespace ConceptFlower.ViewModel
         private void ReadExcel()
         {
 
-            ProcessLogProxy.Debug("Start Read Excel's Processing", "Red", 3);
+            //ProcessLogProxy.Debug("Start Read Excel's Processing", "Red", 3);
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = "c:\\";
-            openFileDialog.Filter = "文本文件|*.*|Excel文件|*.xls|所有文件|*.*";
+            openFileDialog.Filter = "Excel文件|*.xls;*.xlsx";
             openFileDialog.RestoreDirectory = true;
             openFileDialog.FilterIndex = 1;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -1489,19 +1515,20 @@ namespace ConceptFlower.ViewModel
 
         private void Readxml()
         {
-            ProcessMsg p = new ProcessMsg();
-            p.Color = "Green";
-            p.Msg = "Testxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-            p.Level = 1;
-            ProcessLogProxy.MessageAction(p);
-            ProcessLogProxy.Debug("Debug message test", "Red", 3);
-            ProcessLogProxy.Info("Normal message test");
-            ProcessLogProxy.Message("This is a message test", "Blue");
+            //ProcessMsg p = new ProcessMsg();
+            //p.Color = "Green";
+            //p.Msg = "Testxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+            //p.Level = 1;
+            //ProcessLogProxy.MessageAction(p);
+            //ProcessLogProxy.Debug("Debug message test", "Red", 3);
+            //ProcessLogProxy.Info("Normal message test");
+            //ProcessLogProxy.Message("This is a message test", "Blue");
 
             string filename = string.Empty;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = "c:\\";//注意这里写路径时要用c:\\而不是c:\
-            openFileDialog.Filter = "文本文件|*.*|xml文件|*.xml|所有文件|*.*";
+            //openFileDialog.Filter = "文本文件|*.*|xml文件|*.xml|所有文件|*.*";
+            openFileDialog.Filter = "xml文件|*.xml";
             openFileDialog.RestoreDirectory = true;
             openFileDialog.FilterIndex = 1;
             if (openFileDialog.ShowDialog() == DialogResult.OK)

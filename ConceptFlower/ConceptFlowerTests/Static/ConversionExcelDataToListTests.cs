@@ -11,6 +11,7 @@ using System.Data;
 using System.Text.RegularExpressions;
 using WinX.virtualAccount;
 using ConceptFlower.ViewModel;
+using System.Collections;
 
 namespace ConceptFlower.Static.Tests
 {
@@ -224,5 +225,43 @@ namespace ConceptFlower.Static.Tests
             return rejectionReason;
         }
 
+        [TestMethod]
+        public void TestRange()
+        {
+            List<ModelTest> list = new List<ModelTest>();
+            for (int i=0;i<100;i++)
+            {
+                ModelTest t = new ModelTest { A = i, B = "Test" };
+                list.Add(t);
+            }
+            List<ModelTest> result=TestList(list);
+        }
+        private List<ModelTest> TestList(List<ModelTest> list)
+        {
+            ArrayList arrayList = new ArrayList();//声明一个集合对象
+
+            Random r = new Random();//声明一个随机对象
+            for (int i = 0; i < 20; i++)
+            {
+                int number = r.Next(0, list.Count() - 1);//生成一个随机数，0-9
+                while (arrayList.Contains(number))//判断集合中有没有生成的随机数，如果有，则重新生成一个随机数，直到生成的随机数list集合中没有才退出循环
+                {
+                    number = r.Next(0, list.Count() - 1);
+                }
+                arrayList.Add(number);//将生成的随机数添加到集合对象中
+            }
+            List<ModelTest> resultList = new List<ModelTest>();
+            arrayList.Sort();
+            foreach (int index in arrayList)
+            {
+                resultList.Add(list[index]);
+            }
+            return resultList;
+        }
+    }
+    public class ModelTest
+    {
+        public int A { get; set; }
+        public string B { get; set; }
     }
 }

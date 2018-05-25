@@ -21,7 +21,7 @@ namespace ConceptFlower.BLL
             Regex reg4 = new Regex(@"^\d{8}$");
             Regex reg5 = new Regex(@"^\d{17}$");
             Regex reg6 = new Regex(@"^(\d{9})(-|\s)(\d{8})$");
-            Regex reg7 = new Regex(@"^\d{17}$");
+            Regex reg7 = new Regex(@"^\d{16}$");
             #region first select logic
             try
             {
@@ -127,7 +127,7 @@ namespace ConceptFlower.BLL
         /// <param name="whlist"></param>
         /// <param name="reg"></param>
         /// <returns></returns>
-        private static SH795AccoutModel GetAccountByReg1(TransferCase cs, List<SH795AccoutModel> entityList, Regex reg)
+        private static SH795AccoutModel GetAccountByReg1(TransferCase cs, List<SH795AccoutModel> entityList, Regex reg) 
         {
             string SchemeID = reg.Match(cs.OriSchAcctMemNo).Groups[1].Value;
             string MembershipNo = reg.Match(cs.OriSchAcctMemNo).Groups[3].Value;
@@ -136,8 +136,6 @@ namespace ConceptFlower.BLL
             {
                 acModel.SchemeIDInXml = SchemeID;
                 acModel.MembershipNoInXml = MembershipNo;
-                //result.SchemeIDInAS400 = acModel.SchemeID;
-                //result.MemberShipNoInAS400 = acModel.Client;
             }
             else
             {
@@ -239,7 +237,23 @@ namespace ConceptFlower.BLL
                 mylist = mylist.Where(t => list.Where(m => m.SchemeID == t.SchemeID).Count()>0).ToList();
                 if (mylist.Count() > 1)
                 {
-                    throw new AccountException("There are MemebershipNo with multiple data is the same");
+                    mylist = mylist.Where(t => list.Where(m => m.SchemeID == t.SchemeID).Count() > 0 && t.Sts == "CU").ToList();
+                    if (mylist.Count() > 1)
+                    {
+                        mylist = mylist.Where(t => list.Where(m => m.SchemeID == t.SchemeID && m.IsFirst).Count() > 0).ToList();
+                        if (mylist.Count() > 1)
+                        {
+                            throw new AccountException("There are MemebershipNo with multiple data is the same");
+                        }
+                        else
+                        {
+                            acModel = mylist.FirstOrDefault();
+                        }
+                    }
+                    else
+                    {
+                        acModel = mylist.FirstOrDefault();
+                    }
                 }
                 else if(mylist.Count()==1)
                 {
@@ -312,7 +326,24 @@ namespace ConceptFlower.BLL
                     list2 = list2.Where(t => list.Where(m => m.SchemeID == t.SchemeID).Count() > 0).ToList();
                     if (list2.Count() > 1)
                     {
-                        throw new AccountException("There are MemebershipNo with multiple data is the same");
+                        list2 = list2.Where(t => list.Where(m => m.SchemeID == t.SchemeID).Count() > 0&&t.Sts=="CU").ToList();
+                        if (list2.Count() > 1)
+                        {
+                            list2 = list2.Where(t => list.Where(m => m.SchemeID == t.SchemeID && m.IsFirst).Count() > 0).ToList();
+                            if (list2.Count() > 1)
+                            {
+                                throw new AccountException("There are MemebershipNo with multiple data is the same");
+                            }
+                            else
+                            {
+                                acModel = list2.FirstOrDefault();
+                            }
+                        }
+                        else
+                        {
+                            acModel = list2.FirstOrDefault();
+                        }
+                        //throw new AccountException("There are MemebershipNo with multiple data is the same");
                     }
                     else if (list2.Count() == 1)
                     {
@@ -552,5 +583,6 @@ namespace ConceptFlower.BLL
         public string SchemeID { get; set; }
         public string SchemeCode { get; set; }
         public string CaseNO { get; set; }
+        public bool IsFirst { get; set; }
     }
 }
