@@ -17,8 +17,20 @@ namespace PcommCore.Screen
         }
 
         public bool IsNTmatched()
-        { 
-            return base.SearchText("NT").IsMatched;
+        {
+            bool isMatch = false;
+            string member = string.Empty;
+            for(int i=13;i<21;i++)
+            {
+                member = GetText(i, 15, 2);
+                if(member=="NT")
+                {
+                    isMatch = true;
+                    break;
+                }
+            }
+            //return base.SearchText("NT").IsMatched;
+            return isMatch;
         }
     }
 }

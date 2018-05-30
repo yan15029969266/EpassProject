@@ -135,6 +135,7 @@ namespace ConceptFlower.Static
                                 if(File.Exists(str))
                                 {
                                     Range cell = wSheet.Cells[i + 2, j + 1];
+                                    cell.Value2 = "View Picture";
                                     wSheet.Hyperlinks.Add(cell, str, Type.Missing, "", Type.Missing);
                                 }
                             }

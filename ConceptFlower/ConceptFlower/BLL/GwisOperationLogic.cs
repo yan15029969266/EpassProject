@@ -138,7 +138,7 @@ namespace ConceptFlower.BLL
                 var t = td.getElementsByTagName("INPUT").item(0) as HTMLInputElement;
                 Thread.Sleep(2000);
                 t.click();
-                Thread.Sleep(500);
+                Thread.Sleep(3000);
                 if (CheckGwisDetailInfo(ts))
                 {
                     find_case = true;

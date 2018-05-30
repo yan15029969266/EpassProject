@@ -15,12 +15,12 @@ namespace ConceptFlower.BLL
         public static SH795AccoutModel Getcase(TransferCase cs, List<SH795AccoutModel> entityList, WhiteListcs whlist, TrusteInfoModel tsinfo, List<UserInfoSchemeInfo> schemeInfoList)
         {
             SH795AccoutModel model = null;
-            Regex reg1 = new Regex(@"^(\d{8})(-|\s)(\d{9})$");
-            Regex reg2 = new Regex(@"^(\d{8})(-|\s)(\d{8})$");
+            Regex reg1 = new Regex(@"^(\d{8})(\D)(\d{9})$");
+            Regex reg2 = new Regex(@"^(\d{8})(\D)(\d{8})$");
             Regex reg3 = new Regex(@"^\d{9}$");
             Regex reg4 = new Regex(@"^\d{8}$");
             Regex reg5 = new Regex(@"^\d{17}$");
-            Regex reg6 = new Regex(@"^(\d{9})(-|\s)(\d{8})$");
+            Regex reg6 = new Regex(@"^(\d{9})(\D)(\d{8})$");
             Regex reg7 = new Regex(@"^\d{16}$");
             #region first select logic
             try

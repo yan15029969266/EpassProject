@@ -158,7 +158,7 @@ namespace PcommCore.Screen
                     }
                 }
                 base.PageDown();
-                NotePadPass(slit, pc);
+                pass=NotePadPass(slit, pc);
             }
             else if (base.NotepadHeaderIsBottom())
             {
@@ -174,9 +174,11 @@ namespace PcommCore.Screen
                         base.SetText("Y", row, 2);
                     }
                 }
+                SendKey(KeyBoard.Enter);
+                pass = CheckNotepad(slit, pc);
             }
-            SendKey(KeyBoard.Enter);
-            pass=CheckNotepad(slit,pc);
+            //SendKey(KeyBoard.Enter);
+            //pass=CheckNotepad(slit,pc);
             return pass;
         }
 

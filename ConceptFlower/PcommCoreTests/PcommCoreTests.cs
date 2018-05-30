@@ -89,9 +89,10 @@ namespace PcommCore.Tests
         [TestMethod]
         public void TestNO()
         {
-            Regex reg1 = new Regex(@"^(\d{8})(-|\s)(\d{9})$");
+            Regex reg1 = new Regex(@"^(\d{8})(\D)(\d{9})$");
             string a = "12345678-123456789";
             string b = "12345678 123456789";
+            string c = @"12345678/123456789";
             if (reg1.IsMatch(a))
             {
                 string a1 = reg1.Match(a).Groups[1].Value;
@@ -101,6 +102,11 @@ namespace PcommCore.Tests
             {
                 string b1 = reg1.Match(b).Groups[1].Value;
                 string b2 = reg1.Match(b).Groups[3].Value;
+            }
+            if (reg1.IsMatch(c))
+            {
+                string c1 = reg1.Match(c).Groups[1].Value;
+                string c2 = reg1.Match(c).Groups[3].Value;
             }
         }
         [TestMethod]
@@ -137,7 +143,7 @@ namespace PcommCore.Tests
         {
             PcommCore pcommCore = new PcommCore("A");
             SN018 sn018 = pcommCore.GetScreen<SN018>();
-            sn018.SelectClientNO("97590051");
+            sn018.SelectClientNO("98039761");
         }
         [TestMethod]
         public void TestCode()

@@ -36,7 +36,7 @@ namespace PcommCore.Screen
             {
                 if (id.StartsWith("2") && scheme_Name.StartsWith("HSBC"))
                 {
-                  
+
                     CursorPos point = base.SearchText(id);
                     if (point.IsMatched)
                     {
@@ -66,7 +66,7 @@ namespace PcommCore.Screen
                 else if (id.StartsWith("3") && scheme_Name.StartsWith("HANG"))
                 {
 
-                   
+
                     CursorPos point = base.SearchText(id);
                     if (point.IsMatched)
                     {
@@ -81,7 +81,7 @@ namespace PcommCore.Screen
                         }
                         else
                         {
-                            Message.Add("HANG Member a/c status is " + sts + " ,pls manual checking" + "id ="+ id + "scheme_Name =" + scheme_Name);
+                            Message.Add("HANG Member a/c status is " + sts + " ,pls manual checking" + "id =" + id + "scheme_Name =" + scheme_Name);
                             return;
                         }
                     }
@@ -100,7 +100,7 @@ namespace PcommCore.Screen
                     base.PageDown();
                     SelectSchemeID(id, scheme_Name, selCol, stsCol);
                     checked_MembershipNo();
-                    Message.Add("Member input info in the column which is different company, pls manual checking" );
+                    Message.Add("Member input info in the column which is different company, pls manual checking");
                     return;
                 }
             }
@@ -109,7 +109,7 @@ namespace PcommCore.Screen
 
                 if (id.StartsWith("2") && scheme_Name.StartsWith("HSBC"))
                 {
-                
+
                     CursorPos point = base.SearchText(id);
                     if (point.IsMatched)
                     {
@@ -134,12 +134,12 @@ namespace PcommCore.Screen
                         is_findcase = false;
                         rowList.AddRange(base.ReadRows(9, 22));
                         checked_MembershipNo();
-                        return;                      
+                        return;
                     }
                 }
                 else if (id.StartsWith("3") && scheme_Name.StartsWith("HANG"))
                 {
-                   
+
                     CursorPos point = base.SearchText(id);
                     if (point.IsMatched)
                     {
@@ -164,7 +164,7 @@ namespace PcommCore.Screen
                         is_findcase = false;
                         rowList.AddRange(base.ReadRows(9, 22));
                         checked_MembershipNo();
-                        return;                                  
+                        return;
                     }
                 }
                 else
@@ -178,7 +178,7 @@ namespace PcommCore.Screen
         }
 
         public void checked_MembershipNo()
-        {     
+        {
             var schemeId = string.Empty;
             rowList.ForEach(x =>
             {
@@ -188,7 +188,7 @@ namespace PcommCore.Screen
                     {
                         Message.Add("HSBC Member a/c  is " + x + " membership no/ERID match with another personal a/c with different scheme, the reject scheme name differ ");
                     }
-                    else if(x.Split(' ').Distinct().ToList()[1].StartsWith("3"))
+                    else if (x.Split(' ').Distinct().ToList()[1].StartsWith("3"))
                     {
                         Message.Add("HANG SENG Member a/c  is " + x + " membership no/ERID match with another personal a/c with different scheme, the reject scheme name differ ");
                     }
@@ -198,7 +198,7 @@ namespace PcommCore.Screen
                     }
                 }
 
-            });           
+            });
         }
 
         public void checked_MembershipNo(List<SH795AccoutModel> accountList)
@@ -225,7 +225,7 @@ namespace PcommCore.Screen
             });
         }
 
-        public List<SH795AccoutModel> GetAccountList(List<SH795AccoutModel> list,int pageIndex)
+        public List<SH795AccoutModel> GetAccountList(List<SH795AccoutModel> list, int pageIndex)
         {
             //List<SH795AccoutModel> list = new List<SH795AccoutModel>();
             Regex reg = new Regex(@"\s{2,}");
@@ -233,20 +233,20 @@ namespace PcommCore.Screen
             {
                 List<string> msgList = base.ReadRows(9, 22);
                 int row = 9;
-                foreach(string msg in msgList)
+                foreach (string msg in msgList)
                 {
                     //var strList = reg.Split(msg.Trim());
                     //if(strList.Count()<6)
                     //{
                     //    continue;
                     //}
-                    if(string.IsNullOrEmpty(msg.Substring(5, 10).Trim()))
+                    if (string.IsNullOrEmpty(msg.Substring(5, 10).Trim()))
                     {
                         continue;
                     }
                     SH795AccoutModel model = new SH795AccoutModel
                     {
-                        pageIndex=pageIndex,
+                        pageIndex = pageIndex,
                         rowIndex = row,
                         //SchemeID = strList[0],
                         //EmployerName = strList[1],
@@ -285,14 +285,14 @@ namespace PcommCore.Screen
                     }
                     SH795AccoutModel model = new SH795AccoutModel
                     {
-                        pageIndex=pageIndex,
+                        pageIndex = pageIndex,
                         rowIndex = row,
-                        SchemeID=msg.Substring(5, 10).Trim(),
-                        EmployerName=msg.Substring(15, 31).Trim(),
-                        PayCID=msg.Substring(46, 10).Trim(),
-                        Client=msg.Substring(56, 9).Trim(),
-                        Sts=msg.Substring(65, 4).Trim(),
-                        DJS= Convert.ToDateTime(msg.Substring(69).Trim())
+                        SchemeID = msg.Substring(5, 10).Trim(),
+                        EmployerName = msg.Substring(15, 31).Trim(),
+                        PayCID = msg.Substring(46, 10).Trim(),
+                        Client = msg.Substring(56, 9).Trim(),
+                        Sts = msg.Substring(65, 4).Trim(),
+                        DJS = Convert.ToDateTime(msg.Substring(69).Trim())
                     };
                     list.Add(model);
                     row++;
@@ -300,102 +300,74 @@ namespace PcommCore.Screen
             }
             return list;
         }
-        public void SelectCase(SH795AccoutModel model,string scheme_Name, List<SH795AccoutModel> entityList, int selCol = 3, int stsCol = 66)
-        {
-            is_findcase = true;
-            for(int i=1;i<model.pageIndex;i++)
-            {
-                //SendKey(KeyBoard.PF3);
-                base.PageDown();
-            }
-            base.SetText("Y", model.rowIndex, selCol);
-            SendKey(KeyBoard.Enter);
-            return;
-            //if (model.MembershipNoInXml.StartsWith("2") && scheme_Name.StartsWith("HSBC"))
-            //{
-            //    //base.SetText("Y", model.rowIndex, selCol);
-            //    //SendKey(KeyBoard.Enter);
-            //    //return;
-            //    //if (model.Sts == "CU" || model.Sts == "NO")
-            //    //{
-            //        base.SetText("Y", model.rowIndex, selCol);
-            //        SendKey(KeyBoard.Enter);
-            //        return;
-            //    //}
-            //    //else
-            //    //{
-            //    //    Message.Add("HSBC Member a/c status is " + model.Sts + " ,pls manual checking");
-            //    //    checked_MembershipNo(entityList);
-            //    //    return;
-            //    //}
+        //public void SelectCase(SH795AccoutModel model,string scheme_Name, List<SH795AccoutModel> entityList, int selCol = 3, int stsCol = 66)
+        //{
+        //    is_findcase = true;
+        //    for(int i=1;i<model.pageIndex;i++)
+        //    {
+        //        //SendKey(KeyBoard.PF3);
+        //        base.PageDown();
+        //    }
+        //    base.SetText("Y", model.rowIndex, selCol);
+        //    SendKey(KeyBoard.Enter);
+        //    return;
+        //    //if (model.MembershipNoInXml.StartsWith("2") && scheme_Name.StartsWith("HSBC"))
+        //    //{
+        //    //    //base.SetText("Y", model.rowIndex, selCol);
+        //    //    //SendKey(KeyBoard.Enter);
+        //    //    //return;
+        //    //    //if (model.Sts == "CU" || model.Sts == "NO")
+        //    //    //{
+        //    //        base.SetText("Y", model.rowIndex, selCol);
+        //    //        SendKey(KeyBoard.Enter);
+        //    //        return;
+        //    //    //}
+        //    //    //else
+        //    //    //{
+        //    //    //    Message.Add("HSBC Member a/c status is " + model.Sts + " ,pls manual checking");
+        //    //    //    checked_MembershipNo(entityList);
+        //    //    //    return;
+        //    //    //}
 
-            //}
-            //else if (model.MembershipNoInXml.StartsWith("3") && scheme_Name.StartsWith("HANG"))
-            //{
-            //    //base.SetText("Y", model.rowIndex, selCol);
-            //    //SendKey(KeyBoard.Enter);
-            //    ////base.Enter(model.rowIndex, selCol);
-            //    ////return;
+        //    //}
+        //    //else if (model.MembershipNoInXml.StartsWith("3") && scheme_Name.StartsWith("HANG"))
+        //    //{
+        //    //    //base.SetText("Y", model.rowIndex, selCol);
+        //    //    //SendKey(KeyBoard.Enter);
+        //    //    ////base.Enter(model.rowIndex, selCol);
+        //    //    ////return;
 
-            //    //if (model.Sts == "CU" || model.Sts == "NO")
-            //    //{
-            //        base.SetText("Y", model.rowIndex, selCol);
-            //        SendKey(KeyBoard.Enter);
-            //    //    return;
-            //    //}
-            //    //else
-            //    //{
-            //    //    Message.Add("HANG Member a/c status is " + model.Sts + " ,pls manual checking");
-            //    //    checked_MembershipNo(entityList);
-            //    //    return;
-            //    //}
-            //}
-            //else
-            //{
-            //    Message.Add("Member input info in the column which is different company, pls manual checking");
-            //    checked_MembershipNo(entityList);
-            //    return;
-            //}
-        }
-        public bool SelectCase(SH795AccoutModel model, string scheme_Name , int selCol = 3, int stsCol = 66)
+        //    //    //if (model.Sts == "CU" || model.Sts == "NO")
+        //    //    //{
+        //    //        base.SetText("Y", model.rowIndex, selCol);
+        //    //        SendKey(KeyBoard.Enter);
+        //    //    //    return;
+        //    //    //}
+        //    //    //else
+        //    //    //{
+        //    //    //    Message.Add("HANG Member a/c status is " + model.Sts + " ,pls manual checking");
+        //    //    //    checked_MembershipNo(entityList);
+        //    //    //    return;
+        //    //    //}
+        //    //}
+        //    //else
+        //    //{
+        //    //    Message.Add("Member input info in the column which is different company, pls manual checking");
+        //    //    checked_MembershipNo(entityList);
+        //    //    return;
+        //    //}
+        ////}
+        public bool SelectCase(SH795AccoutModel model, int selCol = 3, int stsCol = 66)
         {
             is_findcase = false; ;
             for (int i = 1; i < model.pageIndex; i++)
             {
-                //SendKey(KeyBoard.PF3);
                 base.PageDown();
             }
-            //if (model.Sts == "CU" || model.Sts == "NO")
-            //{
-                base.SetText("Y", model.rowIndex, selCol);
-                SendKey(KeyBoard.Enter);
-                is_findcase = true;
-            //}
-            //if (model.MembershipNoInXml.StartsWith("2") && scheme_Name.StartsWith("HSBC"))
-            //{
-            //    //base.SetText("Y", model.rowIndex, selCol);
-            //    //SendKey(KeyBoard.Enter);
-            //    //return;
+            base.SetText("Y", model.rowIndex, selCol);
+            SendKey(KeyBoard.Enter);
+            is_findcase = true;
 
-            //}
-            //else if (model.MembershipNoInXml.StartsWith("3") && scheme_Name.StartsWith("HANG"))
-            //{
-            //    //
-            //    //SendKey(KeyBoard.Enter);
-            //    ////base.Enter(model.rowIndex, selCol);
-            //    //return;
-
-            //    if (model.Sts == "CU" || model.Sts == "NO")
-            //    {
-            //        base.SetText("Y", model.rowIndex, selCol);
-            //        SendKey(KeyBoard.Enter);
-            //        is_findcase = true; ;
-            //    }
-            //}
-            //else
-            //{
-            //    Message.Add("Member input info in the column which is different company, pls manual checking");
-            //}
             return is_findcase;
         }
     }
@@ -404,7 +376,7 @@ namespace PcommCore.Screen
         public int pageIndex { get; set; }
         public int rowIndex { get; set; }
         public string SchemeID { get; set; }
-        public string EmployerName  { get; set; }
+        public string EmployerName { get; set; }
         public string PayCID { get; set; }
         public string Client { get; set; }
         public string Sts { get; set; }

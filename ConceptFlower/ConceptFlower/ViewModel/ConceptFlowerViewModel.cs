@@ -210,7 +210,7 @@ namespace ConceptFlower.ViewModel
                 try
                 {
                     int index = 1;
-                    List<TransferCase> runList = slidt.TransferCase.Where(t => t.RequestFormType == "PC" && t.RequestFormType == "PM").ToList();
+                    List<TransferCase> runList = slidt.TransferCase.Where(t => t.RequestFormType == "PC" || t.RequestFormType == "PM").ToList();
                     if (slidt.TransferCase.Count() > 20)
                     {
                         runList = TestList(slidt.TransferCase);
@@ -226,6 +226,7 @@ namespace ConceptFlower.ViewModel
                         //   bug  whlist.Membership_No = cs.OriSchAcctMemNo;
                         whlist.Name_in_XML = cs.MemEngName;
                         whlist.HKID = cs.MemHKIDNo + "(" + cs.MemHKIDCheckDigit + ")";
+                        SH795AccoutModel acModel = null;
                         #region 下载图片到excel
                         string filePath = Path.GetDirectoryName(ExcelPath) + @"\Image\" + cs.TransferCaseNo + ".jpg";
                         Util.Base64SaveFlie(cs.FormImageCode, filePath);
@@ -238,7 +239,7 @@ namespace ConceptFlower.ViewModel
                                 whlist.Signature_Pass = gwisOperation.Member;
                                 if (gwisOperation.Member != null && gwisOperation.Member.Trim() == "Unmatched")
                                 {
-                                    
+
                                     whlist.ErrorCode.Append("6,");
                                 }
                                 else if (gwisOperation.Member != null && gwisOperation.Member.Trim() == "No MIP")
@@ -251,6 +252,7 @@ namespace ConceptFlower.ViewModel
                             }
                             else
                             {
+                                whlist.Signature_Pass = gwisOperation.Member;
                                 bool isSelectCase = false;
                                 //whlist.Name_Pass = gwisOperation.Member;
 
@@ -292,78 +294,7 @@ namespace ConceptFlower.ViewModel
                                 {
                                     List<string> schemeList = new List<string>();
                                     List<string> clientList = new List<string>();
-
-                                    isSelectCase = CkeckOriSchAcctMemNo(cs, whlist, tsinfo, SH795, schemeInfoList);
-                                    #region 原始逻辑
-                                    //if (cs.OriSchAcctMemNo.IndexOf('-') != 1)
-                                    //{
-
-                                    //    whlist.Message_Mark = "Y";
-                                    //    ProcessLogProxy.Debug("SH795 Select  SechemeId", "Green", 1);
-                                    //    if (cs.OriSchAcctMemNo.Split('-')[0].Length == 8 &&
-                                    //        cs.OriSchAcctMemNo.Split('-')[1].Length == 9)
-                                    //    {
-                                    //        SH795.SelectSchemeID(cs.OriSchAcctMemNo.Split('-')[0], tsinfo.Scheme_name);
-                                    //        whlist.ERID = cs.OriSchAcctMemNo.Split('-')[0];
-
-                                    //        if (!SH795.is_findcase)
-                                    //        {
-                                    //            SH795.checked_MembershipNo();
-                                    //        }
-                                    //        //SH795.Message.ToList().ForEach(x =>
-                                    //        //{
-
-                                    //        //    whlist.Unclean_Reason.Append(x + "\r\n");
-                                    //        //});
-                                    //    }
-                                    //    else
-                                    //    {
-                                    //        SH795.SelectSchemeID(cs.OriSchAcctMemNo, tsinfo.Scheme_name);
-                                    //        if (!SH795.is_findcase)
-                                    //        {
-                                    //            SH795.checked_MembershipNo();
-                                    //        }
-                                    //    }
-                                    //}
-                                    //else
-                                    //{
-
-                                    //    SH795.SelectSchemeID(cs.OriSchAcctMemNo, tsinfo.Scheme_name);
-                                    //    if (!SH795.is_findcase)
-                                    //    {
-                                    //        SH795.checked_MembershipNo();
-                                    //    }
-
-                                    //    //SH795.Message.ToList().ForEach(x =>
-                                    //    //{
-
-                                    //    //    whlist.Unclean_Reason.Append(x + "\r\n");
-                                    //    //});
-                                    //    //SH795.checked_MembershipNo();
-
-
-                                    //    //if (cs.OriSchAcctMemNo.Length == 9)
-                                    //    //{
-                                    //    //    whlist.Unclean_Reason.Append("ERID is blank ,pls input correct ERID whitelsit, pls input correct whitelsit \r\n");
-                                    //    //    ProcessLogProxy.Debug("ERID is blank ,pls input correct ERID whitelsit", "Red", 1);
-
-                                    //    //    // write excel ERID is blank
-                                    //    //}
-                                    //    //else if (cs.OriSchAcctMemNo.Length == 8)
-                                    //    //{
-                                    //    //    whlist.Unclean_Reason.Append("MemebershipNo is blank , pls input correct whitelsit \r\n");
-                                    //    //    ProcessLogProxy.Debug("MemebershipNo is blank ,pls input In whitelsit", "Red", 1);
-                                    //    //}
-
-                                    //    //else
-                                    //    //{
-                                    //    //    SH795.checked_MembershipNo();
-                                    //    //    whlist.Unclean_Reason.Append("unkonw ERID or MemebershipNo is blank, pls input correct whitelsit \r\n");
-                                    //    //    ProcessLogProxy.Debug("unkonw ERID or MemebershipNo is blank ,pls input In whitelsit", "Red", 1);
-                                    //    //}
-
-                                    //}
-                                    #endregion
+                                    isSelectCase = CkeckOriSchAcctMemNo(cs, whlist, tsinfo, SH795, schemeInfoList, out acModel);
                                     SH795.Message.ToList().ForEach(x =>
                                         {
                                             whlist.Unclean_Reason.Append(x + "\r\n");
@@ -405,6 +336,7 @@ namespace ConceptFlower.ViewModel
                                     {
                                         ProcessLogProxy.Debug("sj672 exsit key word ", "Red", 3);
                                         whlist.Notepad_Pass = "N";
+                                        whlist.Unclean_Reason.Append("Notepad unclean\r\n");
                                     }
 
                                     sj671.Message.ToList().ForEach(x =>
@@ -417,6 +349,14 @@ namespace ConceptFlower.ViewModel
                                 catch
                                 {
                                     throw new Exception("An unknown error occurred in sj671");
+                                }
+                                if (cs.RequestFormType == "PM" && cs.TransferMCAndVC.ToUpper() == "WithDraw".ToUpper())
+                                {
+                                    if (IsNTWithDraw(pcommCore, cs, whlist, acModel))
+                                    {
+                                        whlist.Withdraw_NT_PM = "Y";
+                                    }
+
                                 }
                             }
                             #region whlist ErrorCode去重调整格式
@@ -535,7 +475,7 @@ namespace ConceptFlower.ViewModel
             return list;
         }
 
-        private bool CkeckOriSchAcctMemNo(TransferCase cs, WhiteListcs whlist, TrusteInfoModel tsinfo, SH795 sh795, List<UserInfoSchemeInfo> schemeInfoList)
+        private bool CkeckOriSchAcctMemNo(TransferCase cs, WhiteListcs whlist, TrusteInfoModel tsinfo, SH795 sh795, List<UserInfoSchemeInfo> schemeInfoList, out SH795AccoutModel accountModel)
         {
             //获取list实体
             List<SH795AccoutModel> entityList = new List<SH795AccoutModel>();
@@ -553,6 +493,7 @@ namespace ConceptFlower.ViewModel
                     acModel = SelectCaseFactory.Getcase(cs, entityListPR01, whlist, tsinfo, schemeInfoList);
                     if (acModel == null)
                     {
+                        accountModel = acModel;
                         return false;
                     }
                     else
@@ -585,6 +526,7 @@ namespace ConceptFlower.ViewModel
                             }
                             else
                             {
+                                accountModel = acModel;
                                 return false;
                             }
                         }
@@ -596,42 +538,12 @@ namespace ConceptFlower.ViewModel
                         }
                     }
                 }
-                //if ((acModel.Client.StartsWith("2") && tsinfo.Scheme_name.StartsWith("HANG")) || (acModel.Client.StartsWith("3") && tsinfo.Scheme_name.StartsWith("HSBC")))
-                //{
-                //    whlist.Clean_Case = "N";
-                //    whlist.Unclean_Reason.Append("Member Account or ERID is Error, pls input correct whitelsit \r\n");
-                //    whlist.ErrorCode.Append("4,");
-                //    //return true;
-                //}
-                //if (acModel.Sts == "TE")
-                //{
-                //    whlist.Clean_Case = "N";
-                //    whlist.Unclean_Reason.Append("Member Account or ERID is Error, pls input correct whitelsit \r\n");
-                //    whlist.ErrorCode.Append("9,");
-                //    //return false;
-                //}
-                ////根据SchemeID和MemberShipNO来进入Case
-                //sh795.SendKey(KeyBoard.PF3);
-                //pcommCore.LinkToScreen<SM794>((SM794) =>
-                //{
-                //    ProcessLogProxy.Debug("SM794 screeen Set Identifier", "Green", 1);
-                //    SM794.SetIdentifier(cs.MemHKIDNo);
-                //    SM794.SetSelectOption("D");
-                //    ProcessLogProxy.Debug("SM794 screeen Set option D", "Green", 1);
-                //    SM794.SM794Enter();
-                //    return true;
-
-                //}).LinkToScreen<SH795>((SH795Screen) =>
-                //{
-                //    SH795Screen.SelectCase(acModel, tsinfo.Scheme_name, entityList);
-                //    return true;
-                //});
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message + " in SH795");
             }
-
+            accountModel = acModel;
             return true;
         }
 
@@ -653,7 +565,7 @@ namespace ConceptFlower.ViewModel
 
                 foreach (SH795AccoutModel acModel in entityList)
                 {
-                    if (SH795Screen.SelectCase(acModel, tsinfo.Scheme_name))
+                    if (SH795Screen.SelectCase(acModel))
                     {
                         SM799 sm799 = pcommCore.GetScreen<SM799>();
                         string title = sm799.GetText(3, 58, 20).Trim();
@@ -725,7 +637,7 @@ namespace ConceptFlower.ViewModel
 
             }).LinkToScreen<SH795>((SH795Screen) =>
             {
-                SH795Screen.SelectCase(acModel, tsinfo.Scheme_name, entityList);
+                SH795Screen.SelectCase(acModel);
                 return true;
             });
             // PM PC ERID blank 
@@ -742,19 +654,19 @@ namespace ConceptFlower.ViewModel
 
         private void CheckCaseDetail(Dictionary<string, string> dic, TransferCase cs, WhiteListcs whlist, SM799 sm799)
         {
-            #region MyRegion
-            //string SM799Tips = sm799.GetText(0, 0, 1);
-            //if(SM799Tips.Contains("MPFA"))
-            //{
-            //    whlist.Clean_Case = "N";
-            //    whlist.Unclean_Reason.Append(SM799Tips + "/r/n");
-            //}
-            //string sensitiveFlag= sm799.GetText(0, 0, 1);
-            //if(!string.IsNullOrEmpty(sensitiveFlag))
-            //{
-            //    whlist.Clean_Case = "N";
-            //}
-            #endregion
+
+            string SM799Tips = sm799.GetText(2, 50, 29).Trim();
+            if (SM799Tips.Contains("MPFA"))
+            {
+                whlist.Clean_Case = "N";
+                whlist.Unclean_Reason.Append(SM799Tips + "/r/n");
+            }
+            string sensitiveFlag = sm799.GetText(4, 77, 2).Trim();
+            if (!string.IsNullOrEmpty(sensitiveFlag))
+            {
+                whlist.Clean_Case = "N";
+                whlist.Unclean_Reason.Append(sm799.GetText(4, 60, 20).Trim());
+            }
 
             var id = cs.MemHKIDNo + "(" + cs.MemHKIDCheckDigit + ")";
             //whlist.HKID = id;
@@ -790,14 +702,14 @@ namespace ConceptFlower.ViewModel
                     ProcessLogProxy.Debug("SM799 screen name is error", "Red", 3);
                 }
                 whlist.Clean_Case = "N";
-                if (cs.RequestFormType == "PM")
-                {
-                    //if (cs.TransferMCAndVC == "ALL" && IsNTWithDraw(pcommCore, cs))
-                    //{
-                    //    whlist.ErrorCode.Append("14");
-                    //    whlist.Withdraw_NT_PM = " member has NT balance but XML file choose ALL instead of withdraw ";
-                    //}
-                }
+                //if (cs.RequestFormType == "PM")
+                //{
+                //    if (cs.TransferMCAndVC == "ALL" && IsNTWithDraw(pcommCore, cs))
+                //    {
+                //    //    whlist.ErrorCode.Append("14");
+                //    //    whlist.Withdraw_NT_PM = " member has NT balance but XML file choose ALL instead of withdraw ";
+                //    }
+                //}
                 //whlist.Unclean_Reason.Append("SM799 screen " + dic["MPFCOMPLANT"].ToString() + dic["SENSFLAG"].ToString() + "unmatched \r\n");
 
                 //ProcessLogProxy.Debug("SM799 screen " + dic["MPFCOMPLANT"].ToString() + dic["SENSFLAG"].ToString(), "Red", 3);
@@ -808,10 +720,10 @@ namespace ConceptFlower.ViewModel
             SM800 sm800 = pcommCore.GetScreen<SM800>();
 
             ProcessLogProxy.Debug("SM800  get Chinese Name  ", "Green", 1);
-
-            if (sm800.GetMemberChineseInformation()["CHINESENAME"].ToString().Trim() == cs.MemChiName.Trim() 
+            string chineseNameInAs400 = sm800.GetMemberChineseInformation()["CHINESENAME"].ToString().Trim();
+            if (chineseNameInAs400 == cs.MemChiName.Trim()
                 || string.IsNullOrEmpty(cs.MemChiName.Trim())
-                || string.IsNullOrEmpty(cs.MemChiName.Trim()))
+                || string.IsNullOrEmpty(chineseNameInAs400))
             {
                 sm800.SendKey(KeyBoard.Enter);
             }
@@ -824,9 +736,8 @@ namespace ConceptFlower.ViewModel
                 ProcessLogProxy.Debug("SM800 screen  Chinese Name unmatched" + sm800.GetMemberChineseInformation()["CHINESENAME"].ToString(), "Red", 3);
                 sm800.SendKey(KeyBoard.Enter);
             }
-
         }
-        public bool IsNTWithDraw(PcommCore.PcommCore pcommCore, TransferCase cs)
+        public bool IsNTWithDraw(PcommCore.PcommCore pcommCore, TransferCase cs, WhiteListcs whlist, SH795AccoutModel acModel)
         {
 
             bool isWithDraw = false;
@@ -840,11 +751,18 @@ namespace ConceptFlower.ViewModel
             S0018 s0018 = pcommCore.GetScreen<S0018>();
             s0018.GotoUnitMovements();
 
+            Thread.Sleep(1000);
+            CommonScreen SN521 = pcommCore.GetScreen<CommonScreen>();
+            while (SN521.GetText(1, 72, 5) != "SN521")
+            {
+                Thread.Sleep(1000);
+                SN521 = pcommCore.GetScreen<CommonScreen>();
+            }
+            SN521.SetText(whlist.HKID, 11, 12);
+            SN521.SendKey(KeyBoard.Enter);
+
             SH795 sh795 = pcommCore.GetScreen<SH795>();
-
-            var tsinfo = trusteInfodDic["Trustee info"].Where(x => x.Scheme_Registration_No == cs.OriSchRegNo).FirstOrDefault();
-
-            sh795.SelectSchemeID(cs.OriSchAcctMemNo.Split('-')[0], tsinfo.Scheme_name);
+            sh795.SelectCase(acModel);
 
             SH655 sh655 = pcommCore.GetScreen<SH655>();
 
@@ -872,13 +790,14 @@ namespace ConceptFlower.ViewModel
             OleDbConnection objExcelCon = clit.openExcel();
             ewhlistdic = clit.ExtractEmployeeExcel<ExcelWhlist>(objExcelCon, "White List");
             List<TrusteInfoModel> trusteeInfos = clit.GetExcelDataBySheetName<TrusteInfoModel>(objExcelCon, "Trustee info");
-
+            objExcelCon.Close();
             try
             {
                 await STATask.Run(() =>
                 {
 
-                    var passList = ewhlistdic["White List"].ToList().Where(x => x.Clean_Case == "Y").ToList();
+                    var passList = ewhlistdic["White List"].ToList().Where(x => x.Clean_Case == "Y"
+                    &&(string.IsNullOrEmpty(x.Process_result)||x.Process_result== ProcessResult.Result3)).ToList();
                     pcommCore.SkipToHomeScreen<S0017>();
                     foreach (var wl in passList)
                     {
@@ -915,7 +834,8 @@ namespace ConceptFlower.ViewModel
 
                             Thread.Sleep(1000);
                             string WarningInSN008 = sn008.GetMessage();
-                            if (WarningInSN008.ToUpper().Contains("Discrepency Update Lock".ToUpper()))
+                            //Warning Tips
+                            if (WarningInSN008.ToUpper().Contains("Discrepancy update lock".ToUpper()))
                             {
                                 pcommCore.SkipToHomeScreen<S0017>();
                                 wl.Process_result = ProcessResult.Result3;
@@ -1008,13 +928,24 @@ namespace ConceptFlower.ViewModel
                                 sn0081.setOption("D");
                                 sn0081.setEnter();
                                 SN012 sn012 = pcommCore.GetScreen<SN012>();
-                                sn012.Set_Payment_Option("2");
+
+                                if (wl.PM_AC == "PM" && wl.Withdraw_NT_PM == "Y")
+                                {
+                                    sn012.Set_Payment_Option("3");
+                                }
+                                else
+                                {
+                                    sn012.Set_Payment_Option("2");
+                                }
                                 sn012.Set_Case_Number(sl.TransferCaseNo);
                                 sn012.Set_Employer_Scheme_Transfer("N");
 
                                 sn012.Set_Withdrawal_Ground("NC");
                                 sn012.SetEnter();
-
+                                if (sn012.getErrorMessage().Trim().Contains("Unmatched with NEWD"))
+                                {
+                                    sn012.SendKey(KeyBoard.Enter);
+                                }
                                 if (sn012.getErrorMessage() == "Product ID’s don’t match")
                                 {
                                     ProcessLogProxy.Debug("SN012 Screen " + sn012.getErrorMessage(), "Red", 3);
@@ -1025,12 +956,22 @@ namespace ConceptFlower.ViewModel
                                     //ProcessLogProxy.Debug("SN012 Screen " + sn012.getErrorMessage(), "Red", 3);
                                     //_resultList.Add(new CheckResult { Level = "Warn", CaseItem = cs, Meassage = "SN012 Screen " + sn012.getErrorMessage(), OperationFlag = "未退信" });
                                     SN014 sn014 = pcommCore.GetScreen<SN014>();
-                                    sn014.SetEnter();
+                                    //sn014.SetEnter();
+                                    sn014.SendKey(KeyBoard.Enter);
                                     SN018 sn018 = pcommCore.GetScreen<SN018>();
                                     TrusteInfoModel trusteeInfo = trusteeInfos.Where(t => t.Trustee_Approval_No == sl.NewTRAprvlNo).FirstOrDefault();
                                     if (trusteeInfo != null && !string.IsNullOrEmpty(trusteeInfo.Trustee_client_no))
                                     {
-                                        if (sn018.SelectClientNO(trusteeInfo.Trustee_client_no))
+                                        bool isSelectCase = false;
+                                        if (wl.PM_AC == "PM" && wl.Withdraw_NT_PM == "Y")
+                                        {
+                                            isSelectCase = sn018.SelectClientNOForWithDraw(trusteeInfo.Trustee_client_no, wl.Name_in_XML);
+                                        }
+                                        else
+                                        {
+                                            isSelectCase = sn018.SelectClientNO(trusteeInfo.Trustee_client_no);
+                                        }
+                                        if (isSelectCase)
                                         {
                                             SJ353 sj353 = pcommCore.GetScreen<SJ353>();
                                             // exce 
@@ -1061,7 +1002,15 @@ namespace ConceptFlower.ViewModel
                                                 sn0083.GetMessage().Contains("Record already exists"))
                                                 {
                                                     // update gwis
-                                                    gwisOperation.SetOption(wl, data.In_Short);
+                                                    try
+                                                    {
+                                                        gwisOperation.SetOption(wl, data.In_Short);
+                                                    }
+                                                    catch(Exception ex)
+                                                    {
+                                                        ProcessLogProxy.Debug(ex.Message, "Red", 3);
+                                                        continue;
+                                                    }
                                                 }
                                                 else
                                                 {
@@ -1117,7 +1066,7 @@ namespace ConceptFlower.ViewModel
             catch (Exception e)
             {
 
-                ProcessLogProxy.Debug(e.InnerException.Message, "Red", 3);
+                ProcessLogProxy.Debug(e.Message, "Red", 3);
                 pcommCore.SkipToHomeScreen<S0017>();
             }
         }

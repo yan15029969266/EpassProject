@@ -308,7 +308,7 @@ namespace PcommCore
 
         public bool NotepadHeaderIsHaveNext()
         {
-            return GetTextRect(20, 72, 20, 80).Equals("More...");
+            return GetTextRect(20, 72, 20, 80).Trim().Equals("More...");
         }
 
         public bool NotepadHeaderIsBottom()
